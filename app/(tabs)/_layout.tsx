@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Tabs } from 'expo-router'
+import { Tabs, useNavigation } from 'expo-router'
 
 import { icons } from '../../constants';
 
@@ -17,12 +17,12 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
             <Image
                 source={icon}
                 resizeMode="contain"
-                style={{ tintColor: color, width: 24, height: 24 }}  // Updated style
+                style={{ tintColor: color, width: 24, height: 24 }}
             />
             <Text
                 style={{
                     fontSize: 12,
-                    fontWeight: focused ? '600' : '400',  // Adjusted font weights
+                    fontWeight: focused ? '600' : '400',
                 }}
             >
                 {name}
@@ -32,6 +32,7 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
 };
 
 const TabsLayout = () => {
+    const navigation = useNavigation();
     return (
         <>
             <Tabs
@@ -40,77 +41,78 @@ const TabsLayout = () => {
                 }}
             >
                 <Tabs.Screen
-                    name="home"
+                    name="index"
                     options={{
                         title: "Home",
-                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Home'} focused={focused} />
-                        )
+                        ),
                     }}
                 />
                 <Tabs.Screen
-                    name="events"
+                    name="events/index"
                     options={{
                         title: "Events",
-                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Events'} focused={focused} />
                         ),
-                        tabBarLabel: 'Events',  // Explicitly set the label
+
+                        tabBarLabel: 'Events',
                     }}
                 />
                 <Tabs.Screen
                     name="recomendations"
                     options={{
                         title: "For you",
-                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'For you'} focused={focused} />
-                        )
+                        ),
+
                     }}
                 />
                 <Tabs.Screen
                     name="profile"
                     options={{
                         title: "Profile",
-                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Profile'} focused={focused} />
-                        )
+                        ),
+
                     }}
                 />
                 <Tabs.Screen
                     name="events/create"
                     options={{
                         title: "crete",
-                        headerShown: false,
+                        href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'create'} focused={focused} />
                         ),
                         tabBarStyle: { display: 'none' },
+
                     }}
                 />
                 <Tabs.Screen
                     name="events/edit/[eventId]"
                     options={{
                         title: "edit",
-                        headerShown: false,
+                        href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'edit'} focused={focused} />
                         ),
-                        tabBarStyle: { display: 'none' },
+
+
                     }}
                 />
                 <Tabs.Screen
                     name="events/[eventId]"
                     options={{
                         title: "event",
-                        headerShown: false,
+                        href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'event'} focused={focused} />
                         ),
-                        tabBarStyle: { display: 'none' },
+
                     }}
 
                 />
