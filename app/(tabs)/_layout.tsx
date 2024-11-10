@@ -35,6 +35,7 @@ const TabsLayout = () => {
     const navigation = useNavigation();
     return (
         <>
+
             <Tabs
                 screenOptions={{
                     tabBarShowLabel: false
@@ -44,6 +45,7 @@ const TabsLayout = () => {
                     name="index"
                     options={{
                         title: "Home",
+                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Home'} focused={focused} />
                         ),
