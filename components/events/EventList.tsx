@@ -8,7 +8,7 @@ interface Props {
 
 const EventList = ({ eventsList }: Props) => {
     return (
-        <View className='py-2'>
+        <View className='py-4 ml-auto mr-auto'>
             <EventItem />
         </View>
     )

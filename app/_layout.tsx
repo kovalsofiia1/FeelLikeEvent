@@ -7,6 +7,11 @@ import "react-native-url-polyfill/auto";
 
 import GlobalProvider from "../context/GlobalProvider";
 import Logo from '@/components/shared/Logo';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { GlobalStyles } from '@/components/shared/GlobalStyles';
+import SafeAreaWrapper from '@/components/shared/SafeAreaWrapper';
+import Header from '@/components/shared/Header';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,12 +49,13 @@ const RootLayout = () => {
 
   return (
     <GlobalProvider>
-      <Logo></Logo>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-      </Stack>
+      <SafeAreaWrapper>
+        <Header></Header>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack>
+      </SafeAreaWrapper>
     </GlobalProvider>
   )
 }

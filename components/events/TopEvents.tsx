@@ -6,7 +6,7 @@ import EventList from './EventList'
 const TopEvents = () => {
     return (
         <View>
-            <Text className={`text-lg text-center mb-2`}>Найпопулярніші події</Text>
+            <Text className={`text-xl text-center mb-2 font-bold`}>Найпопулярніші події</Text>
             <Link href="/events" className='text-md underline text-right text-gray-400'>Переглянути усі</Link>
             <EventList eventsList={[]}></EventList>
         </View >
