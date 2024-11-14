@@ -55,6 +55,7 @@ const TabsLayout = () => {
                     name="events/index"
                     options={{
                         title: "Events",
+                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Events'} focused={focused} />
                         ),
@@ -64,8 +65,10 @@ const TabsLayout = () => {
                 />
                 <Tabs.Screen
                     name="recomendations"
+
                     options={{
                         title: "For you",
+                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'For you'} focused={focused} />
                         ),
@@ -76,6 +79,7 @@ const TabsLayout = () => {
                     name="profile"
                     options={{
                         title: "Profile",
+                        headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'Profile'} focused={focused} />
                         ),
@@ -85,7 +89,8 @@ const TabsLayout = () => {
                 <Tabs.Screen
                     name="events/create"
                     options={{
-                        title: "crete",
+                        title: "create",
+                        headerShown: false,
                         href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'create'} focused={focused} />
