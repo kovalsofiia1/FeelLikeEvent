@@ -103,6 +103,7 @@ const TabsLayout = () => {
                     name="events/edit/[eventId]"
                     options={{
                         title: "edit",
+                        headerShown: false,
                         href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'edit'} focused={focused} />
@@ -115,6 +116,7 @@ const TabsLayout = () => {
                     name="events/[eventId]"
                     options={{
                         title: "event",
+                        headerShown: false,
                         href: null,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon icon={icons.home} color={color} name={'event'} focused={focused} />
