@@ -13,7 +13,7 @@ const Profile = () => {
             alert(result.msg);
         }
         else {
-            router.push('/');
+            router.push('/home');
         }
     }
 

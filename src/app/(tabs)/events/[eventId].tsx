@@ -72,7 +72,7 @@ const EventDetailsPage = () => {
 
             {/* Buttons */}
             <View className="flex-row gap-2">
-                <CustomButton onPress={() => { router.push('/') }}>Забронювати</CustomButton>
+                <CustomButton onPress={() => { router.push('/home') }}>Забронювати</CustomButton>
                 <CustomButton onPress={() => { }} isActive={false}>Зберегти</CustomButton>
             </View>
 

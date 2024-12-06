@@ -1,8 +1,10 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Button, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Tabs, useNavigation } from 'expo-router'
+import { Stack, Tabs, useNavigation, useRouter } from 'expo-router'
 
 import { icons } from '@/src/constants';
+import Header from '@/src/components/shared/Header';
+import CustomTabBar from '@/src/components/shared/CustomTabBar';
 
 interface TabIconProps {
     icon: any,
@@ -36,97 +38,14 @@ const TabsLayout = () => {
     return (
         <>
 
-            <Tabs
-                screenOptions={{
-                    tabBarShowLabel: false
-                }}
-            >
-                <Tabs.Screen
-                    name="index"
-                    options={{
-                        title: "Home",
-                        headerShown: false,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'Home'} focused={focused} />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="events/index"
-                    options={{
-                        title: "Events",
-                        headerShown: false,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'Events'} focused={focused} />
-                        ),
-
-                        tabBarLabel: 'Events',
-                    }}
-                />
-                <Tabs.Screen
-                    name="recomendations"
-
-                    options={{
-                        title: "For you",
-                        headerShown: false,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'For you'} focused={focused} />
-                        ),
-
-                    }}
-                />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        title: "Profile",
-                        headerShown: false,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'Profile'} focused={focused} />
-                        ),
-
-                    }}
-                />
-                <Tabs.Screen
-                    name="events/create"
-                    options={{
-                        title: "create",
-                        headerShown: false,
-                        href: null,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'create'} focused={focused} />
-                        ),
-                        tabBarStyle: { display: 'none' },
-
-                    }}
-                />
-                <Tabs.Screen
-                    name="events/edit/[eventId]"
-                    options={{
-                        title: "edit",
-                        headerShown: false,
-                        href: null,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'edit'} focused={focused} />
-                        ),
-
-
-                    }}
-                />
-                <Tabs.Screen
-                    name="events/[eventId]"
-                    options={{
-                        title: "event",
-                        headerShown: false,
-                        href: null,
-                        tabBarIcon: ({ color, focused }) => (
-                            <TabIcon icon={icons.home} color={color} name={'event'} focused={focused} />
-                        ),
-
-                    }}
-
-                />
-
-            </Tabs>
+            <Stack>
+                {/* Define Tab Screens */}
+                <Stack.Screen name="home" options={{ headerShown: false }} />
+                <Stack.Screen name="events/index" options={{ headerShown: false }} />
+                <Stack.Screen name="profile" options={{ headerShown: false }} />
+                <Stack.Screen name="recommendations" options={{ headerShown: false }} />
+            </Stack>
+            <CustomTabBar></CustomTabBar>
         </>
     )
 }

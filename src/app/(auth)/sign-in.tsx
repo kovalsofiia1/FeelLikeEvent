@@ -28,7 +28,7 @@ const SignIn = () => {
 
     useEffect(() => {
         if (authState?.authenticated) {
-            router.push('/');
+            router.push('/home');
         }
     }, [authState])
 
@@ -41,7 +41,7 @@ const SignIn = () => {
             setForm({ ...form, error: result.msg });
         }
         else {
-            router.push('/');
+            router.push('/home');
         }
     }
 

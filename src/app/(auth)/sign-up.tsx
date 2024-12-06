@@ -38,7 +38,7 @@ const SignUp = () => {
 
     useEffect(() => {
         if (authState?.authenticated) {
-            router.push('/');
+            router.push('/home');
         }
     }, [authState])
 
@@ -50,7 +50,7 @@ const SignUp = () => {
             setForm({ ...form, error: result.msg });
         }
         else {
-            router.push('/');
+            router.push('/home');
         }
     }
     const submit = async () => {
