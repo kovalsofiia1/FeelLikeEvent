@@ -1,8 +1,8 @@
 import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
-import CustomButton from '@/components/shared/CustomButton'
+import CustomButton from '@/src/components/shared/CustomButton'
 import { Link, router } from 'expo-router'
-import FormField from '@/components/shared/FormField';
+import FormField from '@/src/components/shared/FormField';
 
 interface IInputValue {
     email: string;

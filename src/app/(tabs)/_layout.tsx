@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Tabs, useNavigation } from 'expo-router'
 
-import { icons } from '../../constants';
+import { icons } from '@/src/constants';
 
 interface TabIconProps {
     icon: any,

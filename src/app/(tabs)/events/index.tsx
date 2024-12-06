@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Link, router } from 'expo-router';
-import Container from '@/components/shared/Container';
-import FormField from '@/components/shared/FormField';
-import EventsFilters from '@/components/events/EventsFilters';
-import CustomButton from '@/components/shared/CustomButton';
-import EventList from '@/components/events/EventList';
-import { icons } from '@/constants';
+import Container from '@/src/components/shared/Container';
+import FormField from '@/src/components/shared/FormField';
+import EventsFilters from '@/src/components/events/EventsFilters';
+import CustomButton from '@/src/components/shared/CustomButton';
+import EventList from '@/src/components/events/EventList';
+import { icons } from '@/src/constants';
 const EventsPage = () => {
     const [isFavorite, setIsFavorite] = useState(true);
     const [searchQuery, setSearchQuery] = useState<string>('');

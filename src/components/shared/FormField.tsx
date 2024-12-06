@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, KeyboardTypeOptions } from "react-native";
 
-import { icons } from "../../constants";
+import { icons } from "@/src/constants";
 
 interface Props {
     title?: string;

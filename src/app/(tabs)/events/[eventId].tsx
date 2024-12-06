@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
-import Container from '@/components/shared/Container';
-import TagsList from '@/components/shared/tags/TagsList';
-import CustomButton from '@/components/shared/CustomButton';
-import CommentsSection from '@/components/shared/CommentsSection';
+import Container from '@/src/components/shared/Container';
+import TagsList from '@/src/components/shared/tags/TagsList';
+import CustomButton from '@/src/components/shared/CustomButton';
+import CommentsSection from '@/src/components/shared/CommentsSection';
 
 type RouteParams = {
     eventId: string;

@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import React from 'react'
-import CustomButton from '@/components/shared/CustomButton';
+import CustomButton from '@/src/components/shared/CustomButton';
 import { router } from 'expo-router';
-import TopEvents from '@/components/events/TopEvents';
-import Container from '@/components/shared/Container';
+import TopEvents from '@/src/components/events/TopEvents';
+import Container from '@/src/components/shared/Container';
 const Home = () => {
     return (
         <Container>
