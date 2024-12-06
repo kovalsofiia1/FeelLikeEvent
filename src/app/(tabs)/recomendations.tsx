@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import AuthGuard from '@/src/components/auth/AuthGuard'
 
 const Recommendations = () => {
     return (
-        <View>
-            <Text>Recommendations</Text>
-        </View>
+        <AuthGuard>
+            <View>
+                <Text>Recommendations</Text>
+            </View>
+        </AuthGuard>
     )
 }
 

@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton'
 import { Link, router } from 'expo-router'
 import FormField from '@/src/components/shared/FormField';
@@ -7,8 +7,8 @@ import { useAuth } from '@/src/context/AuthContext';
 import * as Yup from 'yup';
 
 const loginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email обов\'язковий'),
-    password: Yup.string().min(6, 'Password too short').required('Пароль обов\'язковий'),
+    email: Yup.string().email('Некоректний email').required('Email обов\'язковий'),
+    password: Yup.string().min(6, 'Пароль має містити мінімум 6 символів').required('Пароль обов\'язковий'),
 });
 
 interface IInputValue {
@@ -25,6 +25,12 @@ const SignIn = () => {
         error: ""
     });
     const [errors, setErrors] = useState<IInputValue>({ email: "", password: "" });
+
+    useEffect(() => {
+        if (authState?.authenticated) {
+            router.push('/');
+        }
+    }, [authState])
 
     const login = async (email: string, password: string) => {
         console.log('in login')
