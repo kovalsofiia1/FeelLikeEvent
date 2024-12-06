@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const isWeb = typeof window !== 'undefined';
+export const isWeb = typeof window !== 'undefined';
 
 /**
  * Gets an item from storage.

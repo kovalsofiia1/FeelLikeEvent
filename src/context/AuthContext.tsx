@@ -1,7 +1,7 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import axios from 'axios';
-// import * as SecureStore from 'expo-secure-store';
 import { setItem, deleteItem, getItem } from "@/src/utils/storage";
+import { TOKEN_KEY, API_URL } from '@env';
 
 interface AuthProps {
     authState?: { token: string | null; authenticated: boolean | null },
@@ -10,8 +10,7 @@ interface AuthProps {
     onLogout?: () => Promise<any>;
 }
 
-const TOKEN_KEY = 'my-key';
-export const API_URL = 'localhost:3000';
+console.log(TOKEN_KEY)
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -66,7 +65,9 @@ export const AuthProvider = ({ children }: any) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const result = await axios.post(`${API_URL}/auth/register`, { email, password });
+            console.log('in auth login');
+            const result = await axios.post(`${API_URL}/auth/login`, { email, password });
+            console.log(result);
             setAuthState({
                 token: result.data.token,
                 authenticated: true
@@ -79,7 +80,8 @@ export const AuthProvider = ({ children }: any) => {
             return result;
         }
         catch (e) {
-            return { error: true, msg: (e as any).response.data.msg };
+            console.log(e)
+            return { error: true, msg: (e as any).response.data.message };
         }
     }
 

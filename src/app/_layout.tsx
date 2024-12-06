@@ -4,7 +4,7 @@ import { Stack, useRouter, SplashScreen } from 'expo-router';
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
-
+import dotenv from 'dotenv';
 import GlobalProvider from "@/src/context/GlobalProvider";
 import Logo from '@/src/components/shared/Logo';
 import { SafeAreaView } from 'react-native-safe-area-context';
