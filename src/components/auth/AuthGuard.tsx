@@ -1,19 +1,26 @@
 import React, { useEffect } from "react";
 import { useAuth } from "@/src/context/AuthContext";
-import { router } from "expo-router";
+import { router, useRouter } from "expo-router";
+import { AppDispatch } from "@/src/redux/store";
+import { selectIsLoggedIn } from "@/src/redux/user/selectors";
+import { useDispatch, useSelector } from "react-redux";
 
 const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { authState } = useAuth();
+    // const { authState } = useAuth();
+    const router = useRouter();
+
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     useEffect(() => {
-        if (!authState?.authenticated) {
+        if (!isLoggedIn) {
             router.push('/sign-in');
         }
-    }, [authState?.authenticated]);
+    }, [isLoggedIn])
+
 
     // Render nothing while redirecting or show a loading indicator
-    if (!authState?.authenticated) {
-        return null;
+    if (!isLoggedIn) {
+        return <></>;
     }
 
     return <>{children}</>;

@@ -1,10 +1,14 @@
 import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton'
-import { Link, router } from 'expo-router'
+import { Link, router, useRouter } from 'expo-router'
 import FormField from '@/src/components/shared/FormField';
 import { useAuth } from '@/src/context/AuthContext';
 import * as Yup from 'yup';
+import { AppDispatch } from '@/src/redux/store';
+import { selectUser, selectLoading, selectError, selectIsLoggedIn } from '@/src/redux/user/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { logIn } from '@/src/redux/user/actions';
 
 const loginSchema = Yup.object().shape({
     email: Yup.string().email('Некоректний email').required('Email обов\'язковий'),
@@ -17,33 +21,39 @@ interface IInputValue {
 }
 
 const SignIn = () => {
+
+    const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+
     const [isSubmitting, setSubmitting] = useState(false);
-    const { authState, onLogin } = useAuth();
+    // const { authState, onLogin } = useAuth();
     const [form, setForm] = useState({
         email: "",
-        password: "",
-        error: ""
+        password: ""
     });
     const [errors, setErrors] = useState<IInputValue>({ email: "", password: "" });
 
     useEffect(() => {
-        if (authState?.authenticated) {
+        if (isLoggedIn) {
             router.push('/home');
         }
-    }, [authState])
+    }, [isLoggedIn])
 
-    const login = async (email: string, password: string) => {
-        console.log('in login')
-        const result = await onLogin!(email, password);
-        console.log(result)
-        if (result && result.error) {
-            alert(result.msg);
-            setForm({ ...form, error: result.msg });
-        }
-        else {
-            router.push('/home');
-        }
-    }
+    // const login = async (email: string, password: string) => {
+    //     console.log('in login')
+    //     const result = await onLogin!(email, password);
+    //     console.log(result)
+    //     if (result && result.error) {
+    //         alert(result.msg);
+    //         setForm({ ...form, error: result.msg });
+    //     }
+    //     else {
+    //         router.push('/home');
+    //     }
+    // }
 
     const submit = async () => {
         try {
@@ -51,7 +61,13 @@ const SignIn = () => {
             setErrors({ email: "", password: "" }); // Clear errors
 
             setSubmitting(true);
-            await login(form.email, form.password);
+
+            dispatch(logIn(form))
+                .unwrap()
+                .then(() => {
+                    router.push('/home');
+                })
+
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 const newErrors: IInputValue = { email: "", password: "" }; // Initialize with defaults
@@ -63,7 +79,7 @@ const SignIn = () => {
                     }
                 });
 
-                setErrors(newErrors); // Correct type assignment
+                setErrors(newErrors);
             }
         } finally {
             setSubmitting(false);
@@ -98,7 +114,8 @@ const SignIn = () => {
                         handleChangeText={(e) => setForm({ ...form, password: e })}
                         errorMessage={errors.password}
                     />
-                    {form.error && <Text className='text-red-600 text-center text-lg'>{form.error}</Text>}
+                    {loading && <Text>Loading...</Text>}
+                    {error && <Text className='text-red-600'>{error}</Text>}
                 </View>
 
                 <CustomButton onPress={() => { submit() }} additionalStyles={'w-full px-3 text-center'} textAdditionalStyles='text-lg'>Увійти</CustomButton>

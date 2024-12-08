@@ -1,20 +1,38 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton'
-import { useAuth } from '@/src/context/AuthContext';
 import { router } from 'expo-router';
 import AuthGuard from '@/src/components/auth/AuthGuard';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMyData, fetchUserData, logOut } from '@/src/redux/user/actions';
+import { selectUser, selectLoading, selectError, selectIsLoggedIn } from '@/src/redux/user/selectors';
+import { AppDispatch } from '@/src/redux/store';
 
 const Profile = () => {
-    const { authState, onLogout } = useAuth();
+
+    const dispatch = useDispatch<AppDispatch>();
+    const user = useSelector(selectUser);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            dispatch(fetchMyData());
+        }
+    }, []);
+
     const logout = async () => {
-        const result = await onLogout!();
-        if (result && result.error) {
-            alert(result.msg);
-        }
-        else {
-            router.push('/home');
-        }
+
+        dispatch(logOut())
+            .unwrap()
+            .then(() => {
+                router.push('/home');
+            })
+            .catch(() => {
+                alert(error);
+            });
+
     }
 
     return (
@@ -22,6 +40,10 @@ const Profile = () => {
             <View>
                 <Text>Profile</Text>
                 <CustomButton onPress={() => logout()}>Logout</CustomButton>
+
+                {loading && <Text>Loading...</Text>}
+                {error && <Text>Error: {error}</Text>}
+                {user && <Text>User: {user.name}</Text>}
             </View>
         </AuthGuard>
     )

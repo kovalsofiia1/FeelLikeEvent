@@ -1,11 +1,15 @@
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton'
-import { Link, router } from 'expo-router'
+import { Link, router, useRouter } from 'expo-router'
 import FormField from '@/src/components/shared/FormField';
 import { createUser } from '@/lib/appwrite';
 import { useAuth } from '@/src/context/AuthContext';
 import * as Yup from 'yup';
+import { AppDispatch } from '@/src/redux/store';
+import { selectLoading, selectError, selectIsLoggedIn } from '@/src/redux/user/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { register } from '@/src/redux/user/actions';
 
 const registerSchema = Yup.object().shape({
     firstName: Yup.string().required('Ім\'я обов\'язкове'),
@@ -22,44 +26,54 @@ interface IInputValue {
 }
 
 const SignUp = () => {
-
-    const { authState, onRegister } = useAuth();
+    const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    // const { authState, onRegister } = useAuth();
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
         email: "",
         password: "",
-        error: ""
     });
 
     const errorsInitialState = { email: "", password: "", lastName: "", firstName: "" };
     const [errors, setErrors] = useState<IInputValue>({ ...errorsInitialState });
 
     useEffect(() => {
-        if (authState?.authenticated) {
+        if (isLoggedIn) {
             router.push('/home');
         }
-    }, [authState])
+    }, [isLoggedIn])
 
-    const register = async (email: string, password: string, firstName: string, lastName: string) => {
-        const result = await onRegister!(email, password, firstName, lastName);
-        console.log(result)
-        if (result && result.error) {
-            alert(result.msg);
-            setForm({ ...form, error: result.msg });
-        }
-        else {
-            router.push('/home');
-        }
-    }
+    // const register = async (email: string, password: string, firstName: string, lastName: string) => {
+    //     const result = await onRegister!(email, password, firstName, lastName);
+    //     console.log(result)
+    //     if (result && result.error) {
+    //         alert(result.msg);
+    //         setForm({ ...form, error: result.msg });
+    //     }
+    //     else {
+    //         router.push('/home');
+    //     }
+    // }
+
     const submit = async () => {
         try {
             await registerSchema.validate(form, { abortEarly: false });
             setErrors({ ...errorsInitialState });
 
             setSubmitting(true);
-            await register(form.email, form.password, form.firstName, form.lastName);
+            // await register(form.email, form.password, form.firstName, form.lastName);
+            dispatch(register(form))
+                .unwrap()
+                .then(() => {
+                    router.push('/home');
+                })
+
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 const newErrors: IInputValue = { ...errorsInitialState }; // Initialize with defaults
@@ -124,7 +138,8 @@ const SignUp = () => {
                         value={form.password}
                         handleChangeText={(e) => setForm({ ...form, password: e })}
                     />
-                    {form.error && <Text className='text-red-600 text-center text-lg'>{form.error}</Text>}
+                    {loading && <Text>Loading...</Text>}
+                    {error && <Text className='text-red-600'>{error}</Text>}
                 </View>
                 <CustomButton onPress={() => { submit() }} additionalStyles={'w-full px-3 text-center'} textAdditionalStyles='text-lg'>Зареєструватися</CustomButton>
                 <Link href={'/sign-in'} className='text-blue-500 underline py-3 text-center'>Вже маєте акаунт? Увійдіть</Link>

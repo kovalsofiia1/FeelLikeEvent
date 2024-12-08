@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }: any) => {
         }
         loadToken();
     }, []);
+
     const register = async (email: string, password: string, firstName: string, lastName: string) => {
         try {
             const result = await axios.post(`${API_URL}/auth/register`, { email, password, firstName, lastName });

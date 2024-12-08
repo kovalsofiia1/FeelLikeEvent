@@ -4,15 +4,20 @@ import { Stack, useRouter, SplashScreen } from 'expo-router';
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
-import dotenv from 'dotenv';
-import GlobalProvider from "@/src/context/GlobalProvider";
-import Logo from '@/src/components/shared/Logo';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { View } from 'react-native';
-import { GlobalStyles } from '@/src/components/shared/GlobalStyles';
+// import dotenv from 'dotenv';
+// import GlobalProvider from "@/src/context/GlobalProvider";
+// import Logo from '@/src/components/shared/Logo';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { View } from 'react-native';
+// import { GlobalStyles } from '@/src/components/shared/GlobalStyles';
 import SafeAreaWrapper from '@/src/components/shared/SafeAreaWrapper';
 import Header from '@/src/components/shared/Header';
-import { AuthProvider } from '@/src/context/AuthContext';
+// import { AuthProvider } from '@/src/context/AuthContext';
+import { Provider } from 'react-redux';
+import store, { AppDispatch } from '../redux/store';
+import { loadTokenFromStorage } from '../redux/user/actions';
+import { useDispatch } from 'react-redux';
+import AllContentWrapper from '../components/shared/AllContentWrapper';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -49,15 +54,17 @@ const RootLayout = () => {
   }
 
   return (
-    <AuthProvider>
-      <SafeAreaWrapper>
-        <Header></Header>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
-      </SafeAreaWrapper>
-    </AuthProvider>
+    <Provider store={store}>
+      <AllContentWrapper>
+        <SafeAreaWrapper>
+          <Header></Header>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          </Stack>
+        </SafeAreaWrapper>
+      </AllContentWrapper>
+    </Provider>
   )
 }
 

@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton';
 import { router } from 'expo-router';
 import TopEvents from '@/src/components/events/TopEvents';
 import Container from '@/src/components/shared/Container';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/src/redux/store';
+import { loadTokenFromStorage } from '@/src/redux/user/actions';
 const Home = () => {
+
     return (
         <Container>
             <View className="pt-4">
