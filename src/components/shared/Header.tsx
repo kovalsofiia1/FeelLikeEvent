@@ -13,13 +13,14 @@ const Header = () => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const segments = useSegments();
     const router = useRouter();
-    const isAuthPage = segments.join('/') === '(auth)/sign-in' || segments.join('/') === '(auth)/sign-up' || segments.join('/') === '(tabs)/home';
+    const isAuthPage = segments.join('/') === '(auth)/sign-in' || segments.join('/') === '(auth)/sign-up';
 
     const [shouldShowControls, setShouldShowControls] = useState(false);
 
     // Dynamically determine if controls should be shown
     useEffect(() => {
         setShouldShowControls(!isLoggedIn && !isAuthPage);
+        console.log(!isLoggedIn && !isAuthPage);
     }, [isLoggedIn, isAuthPage]); // The component re-renders when these values change
 
     // const shouldShowControls = !isLoggedIn && !isAuthPage;

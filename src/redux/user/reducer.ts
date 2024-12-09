@@ -21,7 +21,7 @@ const userSlice = createSlice({
       .addCase(loadTokenFromStorage.fulfilled, (state, action) => {
         state.token = action.payload.token;
         state.isLoggedIn = true;
-        // state.user = action.payload.user; // Save user data to the state
+        state.user = action.payload.user; // Save user data to the state
       })
       .addCase(loadTokenFromStorage.rejected, (state) => {
         state.token = null;

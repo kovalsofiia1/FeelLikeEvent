@@ -33,12 +33,12 @@ export const loadTokenFromStorage = createAsyncThunk(
       // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       // Fetch user data with the token
-      // const userDataResponse = await axiosInst.get(`/user/me`);
+      const userDataResponse = await axiosInst.get(`/user/me`);
 
       // console.log(userDataResponse);
       return {
         token,
-        // user: userDataResponse.data, // Assuming user data is returned in the response
+        user: userDataResponse.data, // Assuming user data is returned in the response
       };
     } catch (error: any) {
       // Handle errors (e.g., invalid token or fetch error)
