@@ -35,9 +35,6 @@ const EventDetailsPage = () => {
             setIsLoading(true);
             dispatch(getEventById(eventId as string))
                 .unwrap()
-                .then(() => {
-                    // setIsSaved
-                })
                 .catch((err) => {
                     setError(err.message || "Failed to load event details");
                 })
