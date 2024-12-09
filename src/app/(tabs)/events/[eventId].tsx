@@ -5,10 +5,16 @@ import Container from '@/src/components/shared/Container';
 import TagsList from '@/src/components/shared/tags/TagsList';
 import CustomButton from '@/src/components/shared/CustomButton';
 import CommentsSection from '@/src/components/shared/CommentsSection';
-import { getEventById } from '@/src/services/eventsService';
+// import { bookEvent, saveEvent } from '@/src/services/eventsService';
 import Loader from '@/src/components/shared/Loader';
 import { Event } from '@/src/redux/events/types';
 import { getDate, getTime } from '@/src/utils/dateTime';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/src/redux/user/selectors';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/src/redux/store';
+import { selectCurrentEvent } from '@/src/redux/events/selectors';
+import { bookEvent, getEventById, saveEvent } from '@/src/redux/events/actions';
 
 type RouteParams = {
     eventId: string;
@@ -17,88 +23,119 @@ type RouteParams = {
 const EventDetailsPage = () => {
     const { eventId } = useLocalSearchParams();
 
-    const [event, setEvent] = useState<Event | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const user = useSelector(selectUser);
+
+    const dispatch = useDispatch<AppDispatch>();
+    const currentEvent = useSelector(selectCurrentEvent);
 
     useEffect(() => {
-        const fetchEventDetails = async () => {
-            try {
-                setIsLoading(true);
-                const data = await getEventById(eventId as string); // Fetch event details
-                setEvent(data);
-            } catch (err: any) {
-                setError(err.message || "Failed to load event details");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         if (eventId) {
-            fetchEventDetails();
+            setIsLoading(true);
+            dispatch(getEventById(eventId as string))
+                .unwrap()
+                .then(() => {
+                    // setIsSaved
+                })
+                .catch((err) => {
+                    setError(err.message || "Failed to load event details");
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
         }
     }, [eventId]);
+
+    const handleNotLoggedIn = () => {
+        alert("Увійдіть, щоб могти виконати цю дію!")
+    }
+
+    const handleSaveEvent = async () => {
+        if (!user) {
+            handleNotLoggedIn();
+            return;
+        }
+        dispatch(saveEvent({ eventId: currentEvent?._id as string, isSaved: currentEvent?.isSaved! }));
+    }
+
+    const handleBooking = async () => {
+        if (!user) {
+            handleNotLoggedIn();
+            return;
+        }
+        if (currentEvent?.booking) {
+            dispatch(bookEvent({ eventId_: currentEvent?._id as string, isBooked: currentEvent?.isSaved! }));
+        }
+        else {
+            router.push(`/events/${currentEvent!._id}/booking`);
+        }
+    }
 
     return (
         <Container>
             {isLoading ? <Loader /> :
-                (event && <>
+                (currentEvent ? <>
                     <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
                         <Image
-                            source={{ uri: 'https://via.placeholder.com/150' }} // Placeholder image URL
+                            source={{ uri: 'https://via.placeholder.com/150' }}
                             className="h-full w-full rounded-lg"
                             resizeMode="cover"
                         />
                     </View>
                     <Text className="text-2xl font-bold text-gray-900 mb-2">
-                        {event.name}
+                        {currentEvent.name}
                     </Text>
                     <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-green-600 font-bold">Ціна: {event.price} грн.</Text>
+                        <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
                     </View>
 
 
-                    <TagsList tags={event.tags || []}></TagsList>
+                    <TagsList tags={currentEvent.tags || []}></TagsList>
 
 
                     <Text className="text-gray-700 mb-6">
-                        {event.description}
+                        {currentEvent.description}
                     </Text>
 
                     <View className="mb-6">
                         <Text className="text-gray-900 font-bold mb-2">Деталі:</Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Дата:</Text> {getDate(event.startDate)} - {getDate(event.endDate)}
+                            <Text className="font-bold">Дата:</Text> {getDate(currentEvent.startDate)} - {getDate(currentEvent.endDate)}
                         </Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Час:</Text> {getTime(event.startDate)} - {getTime(event.endDate)}
+                            <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
                         </Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Кількість людей:</Text> до {event.totalSeats}
+                            <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
                         </Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Місто:</Text> {event.location}
+                            <Text className="font-bold">Місто:</Text> {currentEvent.location}
                         </Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Місце:</Text>{event.location}
+                            <Text className="font-bold">Місце:</Text>{currentEvent.location}
                         </Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Організатор:</Text> {event.createdBy.name}
+                            <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
                         </Text>
                     </View>
 
 
                     <Text className="text-gray-700 mb-6">
-                        Вже заброньовано: {event.totalSeats - event.availableSeats}/{event.totalSeats} місць
+                        Вже заброньовано: {currentEvent.totalSeats - currentEvent.availableSeats}/{currentEvent.totalSeats} місць
                     </Text>
 
                     <View className="flex-row gap-2">
-                        <CustomButton onPress={() => { router.push(`/events/${event._id}/booking`) }}>Забронювати</CustomButton>
-                        <CustomButton onPress={() => { }} isActive={false}>Зберегти</CustomButton>
+                        <CustomButton onPress={() => { handleBooking() }}>{currentEvent.booking ? 'Скасувати бронювання' : 'Забронювати'}</CustomButton>
+                        <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити зі збережених' : 'Зберегти'}</CustomButton>
                     </View>
 
                     <CommentsSection></CommentsSection>
                 </>
+                    :
+                    <View>
+                        <Text>Вибачте! На жаль, дана подія зараз не доступна!</Text>
+                    </View>
                 )
             }
         </Container>

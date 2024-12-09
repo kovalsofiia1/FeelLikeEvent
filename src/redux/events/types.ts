@@ -15,6 +15,10 @@ export interface Event {
   tags?: Tag[]; // Optional array of ObjectId strings
   isSaved?: boolean;
   isLiked?: boolean;
+  booking?: {
+    bookingId: string;
+    tickets: number;
+  } | null;
   eventStatus: EventStatus;
   createdBy: {
     _id: string;
