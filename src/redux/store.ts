@@ -41,6 +41,7 @@
 // src/redux/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/reducer';
+import eventsReducer from './events/reducer';
 // Create Redux store
 import { combineReducers } from "redux";
 
@@ -48,6 +49,7 @@ import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
   user: userReducer,
+  events: eventsReducer
 });
 
 const store = configureStore({

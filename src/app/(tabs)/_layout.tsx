@@ -44,6 +44,8 @@ const TabsLayout = () => {
                 <Stack.Screen name="events/index" options={{ headerShown: false }} />
                 <Stack.Screen name="profile" options={{ headerShown: false }} />
                 <Stack.Screen name="recommendations" options={{ headerShown: false }} />
+                <Stack.Screen name="events/[eventId]" options={{ headerShown: false }} />
+                <Stack.Screen name="events/[eventId]/booking" options={{ headerShown: false }} />
             </Stack>
             <CustomTabBar></CustomTabBar>
         </>

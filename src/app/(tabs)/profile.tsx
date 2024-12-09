@@ -22,10 +22,6 @@ const Profile = () => {
         }
     }, [isLoggedIn, dispatch]);
 
-    // if (!isLoggedIn) {
-    //     return <Redirect href="/login" />;
-    // }
-
     const logout = async () => {
 
         dispatch(logOut())

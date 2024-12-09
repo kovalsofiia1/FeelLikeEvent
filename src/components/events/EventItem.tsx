@@ -1,8 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
+import { Event } from '@/src/redux/events/types'
 
-const EventItem = () => {
+interface Props {
+    event: Event
+}
+
+const EventItem = ({ event }: Props) => {
     return (
         <View className="border border-gray-300 rounded-lg p-4 w-72 shadow-sm">
             {/* Image Placeholder */}
@@ -15,26 +20,26 @@ const EventItem = () => {
             </View>
 
             {/* Title */}
-            <Text className="text-lg font-semibold mb-1">Майстерклас з гончарства</Text>
+            <Text className="text-lg font-semibold mb-1">{event.name}</Text>
 
             {/* Description */}
             <Text className="text-sm text-gray-600 mb-2">
-                Долучайтеся до майстер-класу з живопису для початківців! Всі матеріали надаються.
+                {event.description}
             </Text>
 
             {/* Location */}
             <Text className="text-sm text-gray-800 mb-1">
-                Де? Арт-студія "Кольоровий світ"
+                Де? {event.location}
             </Text>
 
             {/* Date */}
             <Text className="text-sm text-gray-800 mb-2">
-                Коли? 15 листопада 2024
+                Коли? {event.startDate}
             </Text>
 
             {/* "More" Link */}
             <TouchableOpacity
-                onPress={() => { router.push('/events/1') }}
+                onPress={() => { router.push(`/events/${event._id}`) }}
             >
                 <Text className="text-blue-500 text-sm font-medium">Більше...</Text>
             </TouchableOpacity>

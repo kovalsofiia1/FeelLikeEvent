@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Link, router } from 'expo-router';
 import Container from '@/src/components/shared/Container';
@@ -7,9 +7,19 @@ import EventsFilters from '@/src/components/events/EventsFilters';
 import CustomButton from '@/src/components/shared/CustomButton';
 import EventList from '@/src/components/events/EventList';
 import { icons } from '@/src/constants';
+import { fetchEvents } from '@/src/redux/events/actions';
+import { selectEvents, selectTopEvents } from '@/src/redux/events/selectors';
+import { AppDispatch } from '@/src/redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 const EventsPage = () => {
-    const [isFavorite, setIsFavorite] = useState(true);
+    const [isFavorite, setIsFavorite] = useState(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const dispatch = useDispatch<AppDispatch>();
+    const events = useSelector(selectEvents);
+    useEffect(() => {
+        dispatch(fetchEvents());
+    }, [])
 
     const handleSearch = (query: string): void => {
         setSearchQuery(query);
@@ -41,7 +51,7 @@ const EventsPage = () => {
             </View>
 
             <Text className='font-bold text-xl text-center'>{isFavorite ? 'Улюблені події' : 'Усі події'}</Text>
-            <EventList eventsList={[]} />
+            <EventList eventsList={events} />
         </Container>
     );
 };

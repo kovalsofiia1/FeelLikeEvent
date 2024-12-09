@@ -1,28 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@env";
+import { Event } from "./types";
+import { fetchEvents } from "./actions";
 
 interface EventState {
-  events: any[]; // Replace with proper event type
+  events: Event[]; // Replace with proper event type
+  topEvents: Event[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: EventState = {
   events: [],
+  topEvents: [],
   loading: false,
   error: null,
 };
-
-// Async thunk to fetch events
-export const fetchEvents = createAsyncThunk("events/fetchEvents", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get(`${API_URL}/events`);
-    return response.data;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Failed to fetch events");
-  }
-});
 
 const eventSlice = createSlice({
   name: "events",
