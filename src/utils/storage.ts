@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
-export const isWeb = typeof window !== 'undefined';
+export const isWeb = Platform.OS === "web";
 
 /**
  * Gets an item from storage.
