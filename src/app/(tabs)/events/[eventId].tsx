@@ -42,6 +42,7 @@ const EventDetailsPage = () => {
                     setIsLoading(false);
                 });
         }
+
     }, [eventId]);
 
     const handleNotLoggedIn = () => {
@@ -123,6 +124,7 @@ const EventDetailsPage = () => {
                     </Text>
 
                     <View className="flex-row gap-2">
+                        {currentEvent.booking && <Text>Ви забронювали {currentEvent.booking.tickets} квитків </Text>}
                         <CustomButton onPress={() => { handleBooking() }}>{currentEvent.booking ? 'Скасувати бронювання' : 'Забронювати'}</CustomButton>
                         <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити зі збережених' : 'Зберегти'}</CustomButton>
                     </View>

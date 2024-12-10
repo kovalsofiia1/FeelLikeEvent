@@ -1,7 +1,14 @@
-import { API_URL } from '@env';
+// import { API_URL } from '@env';
 import axios from 'axios';
 
-export const BaseURL = API_URL;
+
+// const API_URL = "https://secret-cliffs-98368-7f71d52a342a.herokuapp.com"
+
+
+//API_URL = "http://localhost:3000"
+
+
+export const BaseURL = process.env.EXPO_PUBLIC_API_URL;
 
 export const axiosInst = axios.create({
   baseURL: BaseURL,

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react'
+import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import Container from '@/src/components/shared/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '@/src/redux/store';
@@ -8,6 +8,8 @@ import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import CustomButton from '@/src/components/shared/CustomButton';
 import FormField from '@/src/components/shared/FormField';
 import { selectUser } from '@/src/redux/user/selectors';
+import { getEventById } from '@/src/redux/events/actions';
+import { fetchMyData } from '@/src/redux/user/actions';
 
 const BookingPage = () => {
   const { eventId } = useLocalSearchParams();
@@ -22,6 +24,14 @@ const BookingPage = () => {
   const [comment, setComment] = useState('');
   const [tickets, setTickets] = useState('1');
 
+  useEffect(() => {
+    if (!eventId) {
+      router.push('/events');
+    }
+    if (!currentEvent || currentEvent._id !== eventId) {
+      dispatch(getEventById(eventId as string));
+    }
+  }, [eventId])
   const handleBook = async () => {
     alert(`Form submitted: \nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nComment: ${comment}`);
   }

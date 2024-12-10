@@ -1,10 +1,9 @@
 // src/redux/user/actions.ts
-import { API_URL, TOKEN_KEY } from '@env';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { axiosInst, setAuthHeader, clearAuthHeader } from '../../api/axiosSetUp';
 import { deleteItem, getItem, setItem } from '@/src/utils/storage';
 
+const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY || "mykey";
 
 interface RegisterCredentials {
   email: string;

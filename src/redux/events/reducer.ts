@@ -1,6 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { API_URL } from "@env";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";;
 import { Event } from "./types";
 import { bookEvent, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
