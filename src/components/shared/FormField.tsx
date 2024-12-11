@@ -10,7 +10,9 @@ interface Props {
 	otherStyles?: string;
 	keyboardType?: KeyboardTypeOptions;
 	type?: string;
-	errorMessage?: string;
+	multiline?: boolean;
+	numberOfLines?: number;
+	errorMessage?: string | boolean;
 }
 
 const FormField = ({
@@ -21,6 +23,8 @@ const FormField = ({
 	otherStyles,
 	type,
 	errorMessage,
+	multiline = false,
+	numberOfLines = 1,
 	...props
 }: Props) => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +39,8 @@ const FormField = ({
 					placeholder={placeholder}
 					placeholderTextColor="#9CA3AF"
 					onChangeText={handleChangeText}
+					multiline={multiline}
+					numberOfLines={numberOfLines}
 					secureTextEntry={type === "password" && !showPassword}
 					{...props}
 				/>

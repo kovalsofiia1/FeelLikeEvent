@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/src/redux/store';
 import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import { bookEvent, getEventById, saveEvent } from '@/src/redux/events/actions';
+import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 
 type RouteParams = {
     eventId: string;
@@ -45,9 +46,7 @@ const EventDetailsPage = () => {
 
     }, [eventId]);
 
-    const handleNotLoggedIn = () => {
-        alert("Увійдіть, щоб могти виконати цю дію!")
-    }
+
 
     const handleSaveEvent = async () => {
         if (!user) {

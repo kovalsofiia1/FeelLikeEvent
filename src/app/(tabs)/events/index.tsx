@@ -11,18 +11,30 @@ import { fetchEvents } from '@/src/redux/events/actions';
 import { selectEvents, selectTopEvents } from '@/src/redux/events/selectors';
 import { AppDispatch } from '@/src/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
+import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
+import { selectIsLoggedIn } from '@/src/redux/user/selectors';
 const EventsPage = () => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
-
+    const isLoggedIn = useSelector(selectIsLoggedIn);
     const dispatch = useDispatch<AppDispatch>();
     const events = useSelector(selectEvents);
+
     useEffect(() => {
         dispatch(fetchEvents());
     }, [])
 
     const handleSearch = (query: string): void => {
         setSearchQuery(query);
+    }
+
+    const handleAdd = () => {
+        if (!isLoggedIn) {
+            handleNotLoggedIn();
+        }
+        else {
+            router.push('/events/create')
+        }
     }
 
     return (
@@ -47,7 +59,7 @@ const EventsPage = () => {
                         style={{ width: 24, height: 24 }}
                     />
                 </TouchableOpacity>
-                <CustomButton onPress={() => { router.push('/events/create') }} additionalStyles='px-3'>+</CustomButton>
+                <CustomButton onPress={() => { handleAdd() }} additionalStyles='px-3'>+</CustomButton>
             </View>
 
             <Text className='font-bold text-xl text-center'>{isFavorite ? 'Улюблені події' : 'Усі події'}</Text>
