@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, KeyboardTypeOptions, Platform } from "react-native";
 import { icons } from "@/src/constants";
-import { isWeb } from "@/src/utils/storage";
 
 interface Props {
 	title?: string;
@@ -27,7 +26,7 @@ const FormField = ({
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
-		<View className={` ${otherStyles}`}>
+		<View className={`${otherStyles}`}>
 			{title && <Text className="text-base text-gray-500 pb-2">{title}</Text>}
 			<View className="w-full h-15 px-4 py-2 bg-black-100 rounded-3xl border border-gray-400 focus:border-secondary flex flex-row items-center">
 				<TextInput
@@ -35,7 +34,6 @@ const FormField = ({
 					value={value}
 					placeholder={placeholder}
 					placeholderTextColor="#9CA3AF"
-
 					onChangeText={handleChangeText}
 					secureTextEntry={type === "password" && !showPassword}
 					{...props}
@@ -62,3 +60,6 @@ const FormField = ({
 };
 
 export default FormField;
+
+
+

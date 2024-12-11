@@ -59,3 +59,5 @@ const EventsPage = () => {
 export default EventsPage;
 
 const styles = StyleSheet.create({})
+
+

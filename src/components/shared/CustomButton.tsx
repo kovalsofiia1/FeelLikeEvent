@@ -7,16 +7,17 @@ interface Props {
     additionalStyles?: string;
     isLoading?: boolean;
     isActive?: boolean;
+    isDisabled?: boolean;
     textAdditionalStyles?: string;
 }
 
-const CustomButton = ({ children, onPress, additionalStyles = '', isLoading, isActive = true, textAdditionalStyles }: Props) => {
+const CustomButton = ({ children, onPress, additionalStyles = '', isLoading, isActive = true, textAdditionalStyles, isDisabled }: Props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.7}
-            className={`${isActive ? 'bg-blue-500 text-white' : 'border border-slate-500 text-slate-500'} min-h-15 rounded-3xl px-6 py-2 self-start ${additionalStyles} ${isLoading ? 'opacity-50' : ''}`}
+            className={`${isActive ? 'bg-blue-500 text-white' : 'border border-slate-500 text-slate-500'} min-h-15 rounded-3xl px-6 py-2 self-start ${isDisabled ? 'text-blue-300' : ''} ${additionalStyles} ${isLoading ? 'opacity-50' : ''}`}
             onPress={onPress}
-            disabled={isLoading}
+            disabled={isLoading || isDisabled}
         ><Text className={`${isActive ? 'text-white' : 'text-slate-500'} text-md text-center align-middle ${textAdditionalStyles}`}>
                 {children}
             </Text>

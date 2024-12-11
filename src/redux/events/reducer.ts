@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";;
-import { Event } from "./types";
-import { bookEvent, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
+import { Event, EventComment } from "./types";
+import { bookEvent, commentEvent, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
 interface EventState {
   events: Event[]; // Replace with proper event type
   topEvents: Event[];
   currentEvent: Event | null;
+  currentEventComments: EventComment[];
   loading: boolean;
   error: string | null;
 }
@@ -14,6 +15,7 @@ const initialState: EventState = {
   events: [],
   topEvents: [],
   currentEvent: null,
+  currentEventComments: [],
   loading: false,
   error: null,
 };
@@ -41,8 +43,9 @@ const eventSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getEventById.fulfilled, (state, action: PayloadAction<Event>) => {
-        state.currentEvent = action.payload;
+      .addCase(getEventById.fulfilled, (state, action: PayloadAction<{ event: Event, comments: EventComment[] }>) => {
+        state.currentEvent = action.payload.event;
+        state.currentEventComments = action.payload.comments;
         state.loading = false;
       })
       .addCase(getEventById.rejected, (state, action) => {
@@ -50,7 +53,6 @@ const eventSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Save/Unsave Event
       .addCase(saveEvent.fulfilled, (state, action: PayloadAction<{ eventId: string; isSaved: boolean }>) => {
         if (state.currentEvent && state.currentEvent._id === action.payload.eventId) {
           state.currentEvent = {
@@ -60,11 +62,15 @@ const eventSlice = createSlice({
         }
       })
 
-      // Book/Unbook Event
       .addCase(bookEvent.fulfilled, (state, action: PayloadAction<{ _id: string; tickets: number, eventId: string } | null>) => {
         if (!action.payload) {
+          if (state.currentEvent) {
+            state.currentEvent.availableSeats += state.currentEvent.booking?.tickets || 0;
+            state.currentEvent.booking = null;
+          }
           return;
         }
+
         if (state.currentEvent && state.currentEvent._id === action.payload.eventId) {
           state.currentEvent = {
             ...state.currentEvent,
@@ -75,13 +81,19 @@ const eventSlice = createSlice({
           }
         }
       })
-
       // Like/Unlike Event
       .addCase(likeEvent.fulfilled, (state, action: PayloadAction<{ eventId: string; isLiked: boolean }>) => {
         if (state.currentEvent && state.currentEvent._id === action.payload.eventId) {
           state.currentEvent.isLiked = action.payload.isLiked;
         }
+      })
+      .addCase(commentEvent.fulfilled, (state, action: PayloadAction<{ comment: EventComment }>) => {
+        if (state.currentEvent && state.currentEvent._id === action.payload.comment.eventId) {
+          // Here we expect the payload to be { comment: EventComment }
+          state.currentEventComments = [action.payload.comment, ...state.currentEventComments];
+        }
       });
+
   },
 });
 

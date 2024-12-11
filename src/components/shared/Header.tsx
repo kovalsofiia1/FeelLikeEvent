@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react'
 import Logo from './Logo'
 import CustomButton from './CustomButton'
 import { router, useRouter, useSegments } from 'expo-router'
-import { useAuth } from '@/src/context/AuthContext'
 import { icons } from '@/src/constants'
 import { useSelector } from 'react-redux'
 import { selectIsLoggedIn } from '@/src/redux/user/selectors'
 
 const Header = () => {
-    // const { authState } = useAuth();
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const segments = useSegments();
     const router = useRouter();
@@ -23,13 +21,20 @@ const Header = () => {
         console.log(!isLoggedIn && !isAuthPage);
     }, [isLoggedIn, isAuthPage]); // The component re-renders when these values change
 
-    // const shouldShowControls = !isLoggedIn && !isAuthPage;
+    const handlePress = () => {
+
+        if (router.canGoBack()) {
+            router.back();
+        } else {
+            router.push('/home');
+        }
+    };
 
     return (
         <View className='flex flex-row justify-between items-center px-4 py-2 flex-wrap gap-1'>
             <View className='flex flex-row gap-2 items-center'>
                 {!isAuthPage &&
-                    <TouchableOpacity onPress={() => { router.back() }}>
+                    <TouchableOpacity onPress={() => { handlePress() }}>
                         <Image
                             source={icons.leftArrow}
                             resizeMode='contain'

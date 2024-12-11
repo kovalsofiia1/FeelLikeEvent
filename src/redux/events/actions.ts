@@ -1,5 +1,6 @@
 import { axiosInst } from "@/src/api/axiosSetUp";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { EventComment, User } from "./types";
 
 // Async thunk to fetch events
 export const fetchEvents = createAsyncThunk("events/fetchEvents", async (_, { rejectWithValue }) => {
@@ -17,7 +18,9 @@ export const getEventById = createAsyncThunk(
   async (eventId: string, { rejectWithValue }) => {
     try {
       const response = await axiosInst.get(`/events/${eventId}`);
-      return response.data;
+
+      const commentsresp = await axiosInst.get(`events/${eventId}/comments`)
+      return { event: response.data, comments: commentsresp.data };
     } catch (error: any) {
       return rejectWithValue("Unable to fetch event details");
     }
@@ -44,14 +47,14 @@ export const saveEvent = createAsyncThunk(
 // Book/Unbook Event
 export const bookEvent = createAsyncThunk(
   "events/bookEvent",
-  async ({ eventId_, isBooked }: { eventId_: string; isBooked: boolean }, { rejectWithValue }) => {
+  async ({ eventId_, isBooked, data = {} }: { eventId_: string; isBooked: boolean, data: Object }, { rejectWithValue }) => {
     let booking;
     try {
       if (isBooked) {
-        await axiosInst.delete(`/event/${eventId_}/book`);
-        return null
+        await axiosInst.delete(`/events/${eventId_}/book`);
+        return null;
       } else {
-        booking = await axiosInst.post(`/event/${eventId_}/book`, {});
+        booking = await axiosInst.post(`/events/${eventId_}/book`, data);
       }
       const { _id, tickets, eventId } = booking.data.booking
       return { _id, tickets, eventId };
@@ -74,6 +77,29 @@ export const likeEvent = createAsyncThunk(
       return { eventId, isLiked: !isLiked };
     } catch {
       return rejectWithValue(isLiked ? "Failed to unlike the event" : "Failed to like the event");
+    }
+  }
+);
+
+export const commentEvent = createAsyncThunk(
+  "events/commentEvent",
+  async ({ eventId, text }: { eventId: string, text: string }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInst.post(`/events/${eventId}/comment`, { text });
+
+      const comment = response.data.comment;
+
+      return {
+        comment: {
+          userId: comment.userId,
+          eventId: comment.eventId,
+          text: comment.text,
+          date: comment.date,
+          _id: comment._id
+        } as EventComment
+      };
+    } catch {
+      return rejectWithValue("Failed to comment the event");
     }
   }
 );

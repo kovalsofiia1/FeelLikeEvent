@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import CustomButton from '@/src/components/shared/CustomButton'
 import { Link, Redirect, router, useRouter } from 'expo-router'
 import FormField from '@/src/components/shared/FormField';
-import { useAuth } from '@/src/context/AuthContext';
 import * as Yup from 'yup';
 import { AppDispatch } from '@/src/redux/store';
 import { selectUser, selectLoading, selectError, selectIsLoggedIn } from '@/src/redux/user/selectors';

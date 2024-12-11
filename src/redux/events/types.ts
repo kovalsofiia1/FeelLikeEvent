@@ -27,6 +27,21 @@ export interface Event {
   }
 }
 
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  avatarURL?: string;
+}
+
+export interface EventComment {
+  _id: string;
+  userId: User;
+  eventId: string;
+  text: string;
+  date: string;
+}
+
 export interface Tag {
   _id: string;
   name: string;

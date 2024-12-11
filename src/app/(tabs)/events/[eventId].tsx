@@ -63,7 +63,7 @@ const EventDetailsPage = () => {
             return;
         }
         if (currentEvent?.booking) {
-            dispatch(bookEvent({ eventId_: currentEvent?._id as string, isBooked: currentEvent?.isSaved! }));
+            dispatch(bookEvent({ eventId_: currentEvent?._id as string, isBooked: !!currentEvent?.booking, data: {} }));
         }
         else {
             router.push(`/events/${currentEvent!._id}/booking`);
