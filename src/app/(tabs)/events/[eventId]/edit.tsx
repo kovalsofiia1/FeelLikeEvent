@@ -106,7 +106,6 @@ const EditEventPage = () => {
         console.log(`${key}:`, value);
       }
 
-      // Submit data
       try {
         const response = await axiosInst.put(`/events/${eventId}`, formData, {
           headers: {

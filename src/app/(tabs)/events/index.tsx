@@ -13,6 +13,7 @@ import { AppDispatch } from '@/src/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 import { selectIsLoggedIn } from '@/src/redux/user/selectors';
+import { axiosInst } from '@/src/api/axiosSetUp';
 const EventsPage = () => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -36,6 +37,24 @@ const EventsPage = () => {
             router.push('/events/create')
         }
     }
+
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        const getCities = async () => {
+            try {
+                const response = await axiosInst.get('/events/cities', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getCities();
+    }, [])
 
     return (
         <Container>

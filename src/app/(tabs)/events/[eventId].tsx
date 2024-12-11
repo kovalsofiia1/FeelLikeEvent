@@ -127,7 +127,7 @@ const EventDetailsPage = () => {
                     <View className="mb-6">
                         <Text className="text-gray-900 font-bold mb-2">Деталі:</Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)}} - ${getDate(currentEvent.endDate)}`}
+                            <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)} - ${getDate(currentEvent.endDate)}`}
                         </Text>
                         <Text className="text-gray-700">
                             <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
