@@ -45,6 +45,7 @@ const eventSlice = createSlice({
       })
       .addCase(getEventById.fulfilled, (state, action: PayloadAction<{ event: Event, comments: EventComment[] }>) => {
         state.currentEvent = action.payload.event;
+        state.currentEventComments = [];
         state.currentEventComments = action.payload.comments;
         state.loading = false;
       })

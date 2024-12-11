@@ -6,7 +6,12 @@ export interface Event {
   description: string; // Description of the event
   startDate: string; // ISO date string for the start date
   endDate: string; // ISO date string for the end date
-  location: string; // Location of the event
+  location: {
+    country: string;
+    city: string;
+    address: string;
+    place: string
+  } | string; // Location of the event
   images?: string[]; // Optional array of image URLs
   totalSeats: number; // Total number of available seats
   availableSeats: number;

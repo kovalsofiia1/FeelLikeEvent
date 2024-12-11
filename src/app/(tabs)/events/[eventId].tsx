@@ -75,7 +75,7 @@ const EventDetailsPage = () => {
                 (currentEvent ? <>
                     <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
                         <Image
-                            source={{ uri: 'https://via.placeholder.com/150' }}
+                            source={{ uri: `${currentEvent.images && currentEvent.images[0]}` || 'https://via.placeholder.com/150' }}
                             className="h-full w-full rounded-lg"
                             resizeMode="cover"
                         />
@@ -106,12 +106,18 @@ const EventDetailsPage = () => {
                         <Text className="text-gray-700">
                             <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
                         </Text>
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Місто:</Text> {currentEvent.location}
-                        </Text>
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Місце:</Text>{currentEvent.location}
-                        </Text>
+                        {(typeof currentEvent.location === 'string') ? (
+                            <Text className="text-gray-700"><Text className="font-bold">Адреса:</Text> {currentEvent.location}</Text>
+                        ) :
+                            (
+                                <>
+                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.country}</Text>
+                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.city}</Text>
+                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.address}</Text>
+                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.place}</Text>
+                                </>
+                            )
+                        }
                         <Text className="text-gray-700">
                             <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
                         </Text>
@@ -136,7 +142,7 @@ const EventDetailsPage = () => {
                     </View>
                 )
             }
-        </Container>
+        </Container >
     );
 };
 

@@ -13,7 +13,7 @@ const EventItem = ({ event }: Props) => {
             {/* Image Placeholder */}
             <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
                 <Image
-                    source={{ uri: 'https://via.placeholder.com/150' }} // Placeholder image URL
+                    source={{ uri: `${event.images && event.images[0]}` || 'https://via.placeholder.com/150' }} // Placeholder image URL
                     className="h-full w-full rounded-lg"
                     resizeMode="cover"
                 />
@@ -29,7 +29,7 @@ const EventItem = ({ event }: Props) => {
 
             {/* Location */}
             <Text className="text-sm text-gray-800 mb-1">
-                Де? {event.location}
+                Де? {typeof event.location === 'string' ? event.location : event.location?.city}
             </Text>
 
             {/* Date */}

@@ -13,6 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { uk } from 'date-fns/locale';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
+import { axiosInst } from '@/src/api/axiosSetUp';
 
 export const AudienceOptions = [
 	{ value: 'KIDS', label: 'Діти' },
@@ -96,7 +97,7 @@ interface FormValues {
 	name: string;
 	description: string;
 	eventType: string;
-	tags: string;
+	tags: string[];
 	maxAttendees: number;
 	targetAudience: string;
 	isOnline: boolean;
@@ -117,7 +118,7 @@ const CreateEventPage = () => {
 	const handlePickImages = async (setFieldValue: any) => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
+			allowsEditing: false,
 			aspect: [4, 3],
 			quality: 1,
 			allowsMultipleSelection: true, // allows multiple images selection
@@ -125,6 +126,63 @@ const CreateEventPage = () => {
 
 		if (!result.canceled) {
 			setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
+		}
+	};
+
+
+	const handleSubmit = async (values: FormValues) => {
+		const formData = new FormData();
+
+		// Add text data
+		formData.append('name', values.name);
+		formData.append('description', values.description);
+		formData.append('eventType', values.eventType);
+		formData.append('targetAudience', values.targetAudience);
+		formData.append('price', values.price.toString());
+		formData.append('totalSeats', values.maxAttendees.toString());
+		formData.append('tags', JSON.stringify(values.tags)); // Properly append tags
+
+		if (values.isOnline) {
+			formData.append('isOnline', 'true'); // Set true/false explicitly
+			formData.append('link', values.link);
+		} else {
+			formData.append(
+				'location',
+				JSON.stringify({
+					country: values.country,
+					city: values.city,
+					address: values.locationAddress,
+					place: values.place,
+				})
+			);
+		}
+
+		formData.append('startDate', values.startTime.toISOString());
+		formData.append('endDate', values.endTime.toISOString());
+
+		// Add images asynchronously
+		const imagePromises = values.images.map(async (uri, index) => {
+			const blob = await fetch(uri).then((res) => res.blob());
+			formData.append('images', blob, `image_${index}.jpg`);
+		});
+
+		await Promise.all(imagePromises);
+
+		// Log FormData contents
+		for (const [key, value] of formData.entries()) {
+			console.log(`${key}:`, value);
+		}
+
+		// Submit data
+		try {
+			const response = await axiosInst.post('/events', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+		} catch (err) {
+			console.log(err)
+			alert('Сталася помилка при створенні події!')
 		}
 	};
 
@@ -137,7 +195,7 @@ const CreateEventPage = () => {
 							name: '',
 							description: '',
 							eventType: 'LECTURE',
-							tags: '',
+							tags: [],
 							maxAttendees: 0,
 							targetAudience: 'ADULTS',
 							isOnline: false,
@@ -153,14 +211,11 @@ const CreateEventPage = () => {
 							link: '',
 						} as FormValues}
 						validationSchema={validationSchema}
-						onSubmit={(values) => {
-							console.log('Form Submitted', values);
-							// Submit form data, e.g., send it to an API
-						}}
+						onSubmit={handleSubmit}
 					>
 						{({ values, handleChange, handleSubmit, setFieldValue, errors, touched }) => (
 							<View style={styles.formContainer}>
-								<Text style={styles.heading}>Створити подію</Text>
+								<Text style={styles.heading} className='font-bold text-blue-500'>Створити подію</Text>
 
 								{/* Basic Info */}
 								<View style={styles.section}>
