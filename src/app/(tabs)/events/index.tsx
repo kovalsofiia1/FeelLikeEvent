@@ -38,23 +38,6 @@ const EventsPage = () => {
         }
     }
 
-    const [cities, setCities] = useState([]);
-
-    useEffect(() => {
-        const getCities = async () => {
-            try {
-                const response = await axiosInst.get('/events/cities', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                console.log(response);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getCities();
-    }, [])
 
     return (
         <Container>
