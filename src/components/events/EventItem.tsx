@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
 import { Event } from '@/src/redux/events/types'
+import { getDate } from '@/src/utils/dateTime'
 
 interface Props {
     event: Event
@@ -29,12 +30,12 @@ const EventItem = ({ event }: Props) => {
 
             {/* Location */}
             <Text className="text-sm text-gray-800 mb-1">
-                Де? {typeof event.location === 'string' ? event.location : event.location?.city}
+                Де? {event.location ? (typeof event.location === 'string' ? event.location : event.location?.city) : 'Онлайн'}
             </Text>
 
             {/* Date */}
             <Text className="text-sm text-gray-800 mb-2">
-                Коли? {event.startDate}
+                Коли? {getDate(event.startDate)}
             </Text>
 
             {/* "More" Link */}

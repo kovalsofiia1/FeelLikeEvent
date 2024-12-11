@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";;
 import { Event, EventComment } from "./types";
-import { bookEvent, commentEvent, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
+import { bookEvent, commentEvent, deleteEventById, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
 interface EventState {
   events: Event[]; // Replace with proper event type
@@ -50,6 +50,20 @@ const eventSlice = createSlice({
         state.loading = false;
       })
       .addCase(getEventById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      .addCase(deleteEventById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteEventById.fulfilled, (state, action: PayloadAction<{ eventId: string }>) => {
+        state.currentEvent = null;
+        state.currentEventComments = [];
+        state.loading = false;
+      })
+      .addCase(deleteEventById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

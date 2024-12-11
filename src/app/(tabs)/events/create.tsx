@@ -14,6 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { uk } from 'date-fns/locale';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
 import { axiosInst } from '@/src/api/axiosSetUp';
+import { useRouter } from 'expo-router';
 
 export const AudienceOptions = [
 	{ value: 'KIDS', label: 'Діти' },
@@ -114,6 +115,7 @@ interface FormValues {
 
 
 const CreateEventPage = () => {
+	const router = useRouter();
 	// Handle image picking
 	const handlePickImages = async (setFieldValue: any) => {
 		const result = await ImagePicker.launchImageLibraryAsync({
@@ -121,7 +123,7 @@ const CreateEventPage = () => {
 			allowsEditing: false,
 			aspect: [4, 3],
 			quality: 1,
-			allowsMultipleSelection: true, // allows multiple images selection
+			allowsMultipleSelection: false, // allows multiple images selection
 		});
 
 		if (!result.canceled) {
@@ -143,8 +145,8 @@ const CreateEventPage = () => {
 		formData.append('tags', JSON.stringify(values.tags)); // Properly append tags
 
 		if (values.isOnline) {
-			formData.append('isOnline', 'true'); // Set true/false explicitly
-			formData.append('link', values.link);
+			// formData.append('isOnline', 'true'); // Set true/false explicitly
+			formData.append('isOnline', values.link);
 		} else {
 			formData.append(
 				'location',
@@ -180,9 +182,13 @@ const CreateEventPage = () => {
 					'Content-Type': 'multipart/form-data',
 				},
 			});
+
+			const eventId = response.data.event._id as string;
+			router.push(`/events/${eventId}`)
 		} catch (err) {
 			console.log(err)
 			alert('Сталася помилка при створенні події!')
+			router.push(`/events`)
 		}
 	};
 

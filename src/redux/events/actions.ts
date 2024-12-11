@@ -27,6 +27,18 @@ export const getEventById = createAsyncThunk(
   }
 );
 
+export const deleteEventById = createAsyncThunk(
+  "events/deleteEventById",
+  async (eventId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInst.delete(`/events/${eventId}`);
+      return { eventId };
+    } catch (error: any) {
+      return rejectWithValue("Unable to delete event");
+    }
+  }
+);
+
 // Save/Unsave Event
 export const saveEvent = createAsyncThunk(
   "events/saveEvent",

@@ -25,6 +25,7 @@ export interface Event {
     tickets: number;
   } | null;
   eventStatus: EventStatus;
+  isOnline?: string;
   createdBy: {
     _id: string;
     name: string;

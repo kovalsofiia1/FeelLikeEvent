@@ -14,7 +14,7 @@ import { selectUser } from '@/src/redux/user/selectors';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/src/redux/store';
 import { selectCurrentEvent } from '@/src/redux/events/selectors';
-import { bookEvent, getEventById, saveEvent } from '@/src/redux/events/actions';
+import { bookEvent, deleteEventById, getEventById, saveEvent } from '@/src/redux/events/actions';
 import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 
 type RouteParams = {
@@ -69,6 +69,26 @@ const EventDetailsPage = () => {
         }
     }
 
+    const handleDelete = async () => {
+        if (!user) {
+            handleNotLoggedIn();
+            return;
+        }
+
+        if (user._id !== currentEvent?.createdBy._id) {
+            alert('У вас немає прав видалити дану подію')
+        }
+
+        dispatch(deleteEventById(eventId as string))
+            .unwrap()
+            .then(() => {
+                router.push('/events')
+            })
+            .catch(() => {
+                alert('Сталася помилка при видалені події!');
+            })
+    }
+
     return (
         <Container>
             {isLoading ? <Loader /> :
@@ -80,13 +100,22 @@ const EventDetailsPage = () => {
                             resizeMode="cover"
                         />
                     </View>
-                    <Text className="text-2xl font-bold text-gray-900 mb-2">
-                        {currentEvent.name}
-                    </Text>
-                    <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
+                    <View className='flex flex-row justify-between'>
+                        <View>
+                            <Text className="text-2xl font-bold text-gray-900 mb-2">
+                                {currentEvent.name}
+                            </Text>
+                            <View className="flex-row justify-between items-center mb-4">
+                                <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
+                            </View>
+                        </View>
+                        {user?._id === currentEvent.createdBy._id &&
+                            <View className='flex flex-row gap-2'>
+                                <CustomButton onPress={() => router.push(`/events/${eventId}/edit`)} isActive={false}>Редагувати</CustomButton>
+                                <CustomButton onPress={() => handleDelete()}>Видалити</CustomButton>
+                            </View>
+                        }
                     </View>
-
 
                     <TagsList tags={currentEvent.tags || []}></TagsList>
 
@@ -98,7 +127,7 @@ const EventDetailsPage = () => {
                     <View className="mb-6">
                         <Text className="text-gray-900 font-bold mb-2">Деталі:</Text>
                         <Text className="text-gray-700">
-                            <Text className="font-bold">Дата:</Text> {getDate(currentEvent.startDate)} - {getDate(currentEvent.endDate)}
+                            <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)}} - ${getDate(currentEvent.endDate)}`}
                         </Text>
                         <Text className="text-gray-700">
                             <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
@@ -106,18 +135,32 @@ const EventDetailsPage = () => {
                         <Text className="text-gray-700">
                             <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
                         </Text>
-                        {(typeof currentEvent.location === 'string') ? (
-                            <Text className="text-gray-700"><Text className="font-bold">Адреса:</Text> {currentEvent.location}</Text>
-                        ) :
-                            (
+                        {currentEvent.location ? (
+                            typeof currentEvent.location === 'string' ? (
+                                <Text className="text-gray-700">
+                                    <Text className="font-bold">Адреса:</Text> {currentEvent.location}
+                                </Text>
+                            ) : (
                                 <>
-                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.country}</Text>
-                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.city}</Text>
-                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.address}</Text>
-                                    <Text className="text-gray-700"><Text className="font-bold">Країна:</Text> {currentEvent.location.place}</Text>
+                                    <Text className="text-gray-700">
+                                        <Text className="font-bold">Країна:</Text> {currentEvent.location.country}
+                                    </Text>
+                                    <Text className="text-gray-700">
+                                        <Text className="font-bold">Місто:</Text> {currentEvent.location.city}
+                                    </Text>
+                                    <Text className="text-gray-700">
+                                        <Text className="font-bold">Адреса:</Text> {currentEvent.location.address}
+                                    </Text>
+                                    <Text className="text-gray-700">
+                                        <Text className="font-bold">Місце:</Text> {currentEvent.location.place}
+                                    </Text>
                                 </>
                             )
-                        }
+                        ) : (
+                            <Text className="text-gray-700">
+                                <Text className="font-bold">Місце:</Text> {currentEvent.isOnline}
+                            </Text>
+                        )}
                         <Text className="text-gray-700">
                             <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
                         </Text>

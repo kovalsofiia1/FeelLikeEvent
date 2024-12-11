@@ -1,10 +1,15 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { selectCurrentEvent } from '@/src/redux/events/selectors';
+import { useSelector } from 'react-redux';
 
 const EditEventPage = () => {
   // const router = useRouter();
   const { eventId } = useLocalSearchParams(); // Fetch eventId from the URL
+  const currentEvent = useSelector(selectCurrentEvent);
+
+
 
   return (
     <View>
