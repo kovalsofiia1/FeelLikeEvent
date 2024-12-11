@@ -1,0 +1,15 @@
+export const EventTypeOptions = [
+  { value: 'CONCERT', label: 'Концерт' },
+  { value: 'LECTURE', label: 'Лекція' },
+  { value: 'WEBINAR', label: 'Вебінар' },
+  { value: 'WORKSHOP', label: 'Майстер-клас' },
+  { value: 'SEMINAR', label: 'Семінар' },
+  { value: 'MEETUP', label: 'Зустріч' },
+  { value: 'EXHIBITION', label: 'Виставка' },
+  { value: 'CONFERENCE', label: 'Конференція' },
+  { value: 'FESTIVAL', label: 'Фестиваль' },
+  { value: 'PARTY', label: 'Вечірка' },
+  { value: 'GALA', label: 'Гала' },
+  { value: 'SPORTS', label: 'Спортивний захід' },
+  { value: 'CHARITY', label: 'Благодійність' },
+];

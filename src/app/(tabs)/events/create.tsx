@@ -15,103 +15,11 @@ import { uk } from 'date-fns/locale';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
 import { axiosInst } from '@/src/api/axiosSetUp';
 import { useRouter } from 'expo-router';
+import { AudienceOptions } from '@/src/constants/eventForm/audience';
+import { EventTypeOptions } from '@/src/constants/eventForm/eventTypes';
+import { FormValues } from '@/src/types/eventForm';
 
-export const AudienceOptions = [
-	{ value: 'KIDS', label: 'Діти' },
-	{ value: 'TEENS', label: 'Підлітки' },
-	{ value: 'ADULTS', label: 'Дорослі' },
-	{ value: 'SENIORS', label: 'Літні люди' },
-	{ value: 'PROFESSIONALS', label: 'Професіонали' },
-	{ value: 'STUDENTS', label: 'Студенти' },
-	{ value: 'FAMILIES', label: 'Сім’ї' },
-	{ value: 'CORPORATES', label: 'Корпоративи' },
-	{ value: 'COMMUNITY', label: 'Громада' },
-	{ value: 'GENERAL', label: 'Загальна аудиторія' },
-];
-
-export const EventTypeOptions = [
-	{ value: 'CONCERT', label: 'Концерт' },
-	{ value: 'LECTURE', label: 'Лекція' },
-	{ value: 'WEBINAR', label: 'Вебінар' },
-	{ value: 'WORKSHOP', label: 'Майстер-клас' },
-	{ value: 'SEMINAR', label: 'Семінар' },
-	{ value: 'MEETUP', label: 'Зустріч' },
-	{ value: 'EXHIBITION', label: 'Виставка' },
-	{ value: 'CONFERENCE', label: 'Конференція' },
-	{ value: 'FESTIVAL', label: 'Фестиваль' },
-	{ value: 'PARTY', label: 'Вечірка' },
-	{ value: 'GALA', label: 'Гала' },
-	{ value: 'SPORTS', label: 'Спортивний захід' },
-	{ value: 'CHARITY', label: 'Благодійність' },
-];
-
-const validationSchema = Yup.object().shape({
-	name: Yup.string().required('Це поле є обов’язковим'),
-	description: Yup.string().required('Це поле є обов’язковим'),
-	eventType: Yup.string().required('Виберіть тип події'),
-	targetAudience: Yup.string().required('Виберіть цільову аудиторію'),
-	price: Yup.number().required('Введіть ціну').min(0, 'Ціна не може бути від’ємною'),
-	maxAttendees: Yup.number().required('Введіть кількість місць').min(1, 'Кількість місць не може бути меншою 1'),
-	country: Yup.string().test('required-if-not-online', 'Це поле є обов’язковим', function (value) {
-		const { isOnline } = this.parent;
-		if (!isOnline && !value) {
-			return this.createError({ message: 'Це поле є обов’язковим' });
-		}
-		return true;
-	}),
-	city: Yup.string().test('required-if-not-online', 'Це поле є обов’язковим', function (value) {
-		const { isOnline } = this.parent;
-		if (!isOnline && !value) {
-			return this.createError({ message: 'Це поле є обов’язковим' });
-		}
-		return true;
-	}),
-	locationAddress: Yup.string().test('required-if-not-online', 'Це поле є обов’язковим', function (value) {
-		const { isOnline } = this.parent;
-		if (!isOnline && !value) {
-			return this.createError({ message: 'Це поле є обов’язковим' });
-		}
-		return true;
-	}),
-	place: Yup.string().test('required-if-not-online', 'Це поле є обов’язковим', function (value) {
-		const { isOnline } = this.parent;
-		if (!isOnline && !value) {
-			return this.createError({ message: 'Це поле є обов’язковим' });
-		}
-		return true;
-	}),
-	link: Yup.string().url().test('required-if-online', 'Це поле є обов’язковим', function (value) {
-		const { isOnline } = this.parent;
-		if (isOnline && !value) {
-			return this.createError({ message: 'Це поле є обов’язковим' });
-		}
-		return true;
-	}),
-
-	startTime: Yup.date().required('Виберіть час початку').min(new Date(), 'Час початку не може бути в минулому'),
-	endTime: Yup.date()
-		.required('Виберіть час закінчення')
-		.min(Yup.ref('startTime'), 'Час закінчення має бути пізніше часу початку'),
-});
-
-interface FormValues {
-	name: string;
-	description: string;
-	eventType: string;
-	tags: string[];
-	maxAttendees: number;
-	targetAudience: string;
-	isOnline: boolean;
-	country: string;
-	city: string;
-	locationAddress: string;
-	place: string;
-	price: number;
-	startTime: Date;
-	endTime: Date;
-	images: string[];
-	link: string
-}
+import { eventValidationSchema } from '@/src/types/eventForm';
 
 
 const CreateEventPage = () => {
@@ -216,7 +124,7 @@ const CreateEventPage = () => {
 							images: [],
 							link: '',
 						} as FormValues}
-						validationSchema={validationSchema}
+						validationSchema={eventValidationSchema}
 						onSubmit={handleSubmit}
 					>
 						{({ values, handleChange, handleSubmit, setFieldValue, errors, touched }) => (

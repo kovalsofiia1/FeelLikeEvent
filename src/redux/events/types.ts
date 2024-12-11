@@ -1,12 +1,39 @@
 export type EventStatus = "CREATED" | "VERIFIED" | "DECLINED";
 
+export type AudienceType =
+  | 'KIDS'
+  | 'TEENS'
+  | 'ADULTS'
+  | 'SENIORS'
+  | 'PROFESSIONALS'
+  | 'STUDENTS'
+  | 'FAMILIES'
+  | 'CORPORATES'
+  | 'COMMUNITY'
+  | 'GENERAL';
+
+export type EventType =
+  | 'CONCERT'
+  | 'LECTURE'
+  | 'WEBINAR'
+  | 'WORKSHOP'
+  | 'SEMINAR'
+  | 'MEETUP'
+  | 'EXHIBITION'
+  | 'CONFERENCE'
+  | 'FESTIVAL'
+  | 'PARTY'
+  | 'GALA'
+  | 'SPORTS'
+  | 'CHARITY';
+
 export interface Event {
   _id: string;
   name: string; // Name of the event
   description: string; // Description of the event
   startDate: string; // ISO date string for the start date
   endDate: string; // ISO date string for the end date
-  location: {
+  location?: {
     country: string;
     city: string;
     address: string;
@@ -26,6 +53,8 @@ export interface Event {
   } | null;
   eventStatus: EventStatus;
   isOnline?: string;
+  eventType?: EventType;
+  targetAudience: AudienceType;
   createdBy: {
     _id: string;
     name: string;
