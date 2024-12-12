@@ -14,6 +14,7 @@ import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 import { selectIsLoggedIn } from '@/src/redux/user/selectors';
 import EventItem from '@/src/components/events/EventItem';
 import EventList from '@/src/components/events/EventList';
+import useDebounce from '@/src/hooks/useDebounce';
 
 const EventsPage = () => {
     const [isFavorite, setIsFavorite] = useState(false);
@@ -21,6 +22,7 @@ const EventsPage = () => {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [isLoading, setIsLoading] = useState(false); // Track loading state
     const [filters, setFilters] = useState<any>({}); // Track selected filters
+    const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +30,7 @@ const EventsPage = () => {
 
     useEffect(() => {
         fetchEventsData(currentPage, filters); // Fetch events when page or filters change
-    }, [currentPage, filters, searchQuery]);
+    }, [currentPage, filters, debouncedSearchQuery]);
 
     const fetchEventsData = (page: number, filters: any) => {
         setIsLoading(true);
