@@ -3,7 +3,15 @@ import { Event, EventComment } from "./types";
 import { bookEvent, commentEvent, deleteEventById, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
 interface EventState {
-  events: Event[]; // Replace with proper event type
+  events: {
+    events: Event[],
+    pagination: {
+      page: number,
+      pageSize: number,
+      totalPages: number,
+      totalEvents: number,
+    }
+  }; // Replace with proper event type
   topEvents: Event[];
   currentEvent: Event | null;
   currentEventComments: EventComment[];
@@ -12,7 +20,15 @@ interface EventState {
 }
 
 const initialState: EventState = {
-  events: [],
+  events: {
+    events: [],
+    pagination: {
+      page: 0,
+      pageSize: 6,
+      totalEvents: 0,
+      totalPages: 0
+    }
+  },
   topEvents: [],
   currentEvent: null,
   currentEventComments: [],

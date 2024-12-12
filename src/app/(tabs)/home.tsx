@@ -4,12 +4,7 @@ import CustomButton from '@/src/components/shared/CustomButton';
 import { router } from 'expo-router';
 import TopEvents from '@/src/components/events/TopEvents';
 import Container from '@/src/components/shared/Container';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/src/redux/store';
-import { loadTokenFromStorage } from '@/src/redux/user/actions';
-import { useSelector } from 'react-redux';
-import { selectEvents } from '@/src/redux/events/selectors';
-import { fetchEvents } from '@/src/redux/events/actions';
+
 
 const Home = () => {
 

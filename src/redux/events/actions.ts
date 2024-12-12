@@ -1,16 +1,29 @@
 import { axiosInst } from "@/src/api/axiosSetUp";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { EventComment, User } from "./types";
+import { isWeb } from "@/src/utils/storage";
 
 // Async thunk to fetch events
-export const fetchEvents = createAsyncThunk("events/fetchEvents", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axiosInst.get(`/events`);
-    return response.data;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Failed to fetch events");
+export const fetchEvents = createAsyncThunk(
+  "events/fetchEvents",
+  async (page: number, { rejectWithValue }) => {
+    try {
+      // You can include page and pageSize as query parameters in the URL
+      const pageSize = isWeb ? 8 : 4; // or get it dynamically if needed
+
+      const response = await axiosInst.get(`/events`, {
+        params: {
+          page, // send the page number
+          pageSize, // send the page size
+        },
+      });
+
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch events");
+    }
   }
-});
+);
 
 // Get Event by ID
 export const getEventById = createAsyncThunk(
