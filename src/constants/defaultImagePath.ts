@@ -1,0 +1,1 @@
+export const DEFAULT_EVENT_IMAGE = "https://res.cloudinary.com/dxqlhfkt5/image/upload/v1734022451/events/ahplwrzqtwm78r3tobul.jpg";

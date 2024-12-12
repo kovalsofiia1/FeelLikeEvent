@@ -25,20 +25,6 @@ import EventForm from '@/src/components/events/EventForm';
 
 const CreateEventPage = () => {
 	const router = useRouter();
-	// Handle image picking
-	const handlePickImages = async (setFieldValue: any) => {
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: false,
-			aspect: [4, 3],
-			quality: 1,
-			allowsMultipleSelection: false, // allows multiple images selection
-		});
-
-		if (!result.canceled) {
-			setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
-		}
-	};
 
 
 	const handleSubmit = async (values: FormValues) => {
@@ -97,8 +83,31 @@ const CreateEventPage = () => {
 		} catch (err) {
 			console.log(err)
 			alert('Сталася помилка при створенні події!')
-			router.push(`/events`)
+			// router.push(`/events`)
 		}
+
+		// try {
+		// 	// Add images
+		// 	const imagePromises = values.images.map(async (uri, index) => {
+		// 		const fileType = uri.split('.').pop();
+		// 		const blob = await fetch(uri).then((res) => res.blob());
+		// 		formData.append('images', blob, `image_${index}.${fileType}`);
+		// 	});
+
+		// 	await Promise.all(imagePromises);
+
+		// 	// Log FormData (for debugging)
+		// 	console.log('FormData prepared.');
+
+		// 	// Submit the form
+		// 	const response = await axiosInst.post('/events', formData);
+
+		// 	const eventId = response.data.event._id;
+		// 	router.push(`/events/${eventId}`);
+		// } catch (err) {
+		// 	console.error('Error while creating event:', err);
+		// 	alert('Failed to create the event. Please try again.');
+		// }
 	};
 
 	const initialValues = {

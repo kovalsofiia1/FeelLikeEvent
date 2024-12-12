@@ -16,6 +16,7 @@ import { AppDispatch } from '@/src/redux/store';
 import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import { bookEvent, deleteEventById, getEventById, saveEvent } from '@/src/redux/events/actions';
 import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
+import { DEFAULT_EVENT_IMAGE } from '@/src/constants/defaultImagePath';
 
 type RouteParams = {
     eventId: string;
@@ -93,9 +94,9 @@ const EventDetailsPage = () => {
         <Container>
             {isLoading ? <Loader /> :
                 (currentEvent ? <>
-                    <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
+                    <View className="bg-gray-200 h-40 w-full rounded-lg mb-4">
                         <Image
-                            source={{ uri: `${currentEvent.images && currentEvent.images[0]}` || 'https://via.placeholder.com/150' }}
+                            source={{ uri: (currentEvent.images && currentEvent.images.length > 0 ? currentEvent.images[0] : DEFAULT_EVENT_IMAGE) }}
                             className="h-full w-full rounded-lg"
                             resizeMode="cover"
                         />

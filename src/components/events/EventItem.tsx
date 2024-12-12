@@ -3,6 +3,7 @@ import React from 'react'
 import { router } from 'expo-router'
 import { Event } from '@/src/redux/events/types'
 import { getDate } from '@/src/utils/dateTime'
+import { DEFAULT_EVENT_IMAGE } from '@/src/constants/defaultImagePath'
 
 interface Props {
     event: Event
@@ -14,7 +15,7 @@ const EventItem = ({ event }: Props) => {
             {/* Image Placeholder */}
             <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
                 <Image
-                    source={{ uri: `${event.images && event.images[0]}` || 'https://via.placeholder.com/150' }} // Placeholder image URL
+                    source={{ uri: (event.images && event.images.length > 0 ? event.images[0] : DEFAULT_EVENT_IMAGE) }} // Placeholder image URL
                     className="h-full w-full rounded-lg"
                     resizeMode="cover"
                 />

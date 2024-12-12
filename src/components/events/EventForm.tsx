@@ -307,12 +307,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
           {/* Image Upload */}
           <View style={styles.section}>
             <Text className="text-base text-gray-500 pb-2">Завантажити зображення</Text>
-            {/* <TouchableOpacity
-										style={styles.imagePickerButton}
-										onPress={() => handlePickImages(setFieldValue)}
-									>
-										<Text style={styles.imagePickerText}>Вибрати зображення</Text>
-									</TouchableOpacity> */}
             <CustomButton onPress={() => handlePickImages(setFieldValue)} isActive={false}>Вибрати зображення</CustomButton>
             {values.images.length > 0 && (
               <View style={styles.imagePreviewContainer}>

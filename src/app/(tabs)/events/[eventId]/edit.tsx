@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -22,11 +22,26 @@ import { FormValues } from '@/src/types/eventForm';
 import { eventValidationSchema } from '@/src/types/eventForm';
 import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/src/redux/store';
+import { getEventById } from '@/src/redux/events/actions';
+import EventForm from '@/src/components/events/EventForm';
 
 const EditEventPage = () => {
   // const router = useRouter();
   const { eventId } = useLocalSearchParams(); // Fetch eventId from the URL
   const currentEvent = useSelector(selectCurrentEvent);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (!currentEvent) {
+      dispatch(getEventById(eventId as string))
+        .unwrap()
+        .catch(() => {
+          console.log('error')
+        })
+    }
+  }, [currentEvent]);
 
   const initialValues = {
     name: currentEvent?.name || '',
@@ -38,12 +53,19 @@ const EditEventPage = () => {
     isOnline: !!currentEvent?.isOnline || false,
     link: currentEvent?.isOnline || '',
     price: currentEvent?.price || 0,
+    // country: '',
+    // city: '',
+    // locationAddress: '',
+    // place: '',
+    startTime: new Date(),
+    endTime: new Date(),
+
     country: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.country) : '',
     city: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.city) : '',
     locationAddress: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.address) : '',
     place: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.place) : '',
-    startTime: new Date(currentEvent?.startDate || (new Date()).toISOString()),
-    endTime: new Date(currentEvent?.endDate || (new Date()).toISOString()),
+    // startTime: new Date(currentEvent?.startDate || (new Date()).toISOString()),
+    // endTime: new Date(currentEvent?.endDate || (new Date()).toISOString()),
     images: currentEvent?.images || [],
   }
 
@@ -78,6 +100,10 @@ const EditEventPage = () => {
       if (values.isOnline) {
         // formData.append('isOnline', 'true'); // Set true/false explicitly
         formData.append('isOnline', values.link);
+        formData.append(
+          'location',
+          JSON.stringify({})
+        );
       } else {
         formData.append(
           'location',
@@ -88,6 +114,7 @@ const EditEventPage = () => {
             place: values.place,
           })
         );
+        // formData.append('isOnline', '')
       }
 
       formData.append('startDate', values.startTime.toISOString());
@@ -117,7 +144,7 @@ const EditEventPage = () => {
       } catch (err) {
         console.log(err)
         alert('Сталася помилка при створенні події!')
-        router.push(`/events`)
+        // router.push(`/events`)
       }
     } catch (error) {
       console.error('Error while submitting:', error);
@@ -128,220 +155,7 @@ const EditEventPage = () => {
     <AuthGuard>
       <Container>
         <View>
-          <Formik
-            initialValues={initialValues as FormValues}
-            validationSchema={eventValidationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ values, handleChange, handleSubmit, setFieldValue, errors, touched }) => (
-              <View style={styles.formContainer}>
-                <Text style={styles.heading} className='font-bold text-blue-500'>Редагувати подію</Text>
-
-                {/* Basic Info */}
-                <View style={styles.section}>
-                  <FormField
-                    title="Назва"
-                    value={values.name}
-                    placeholder="Введіть назву події"
-                    handleChangeText={handleChange('name')}
-                    errorMessage={touched.name && errors.name}
-                  />
-                  <FormField
-                    title="Опис події"
-                    value={values.description}
-                    placeholder="Опишіть вашу подію"
-                    handleChangeText={handleChange('description')}
-                    multiline
-                    numberOfLines={4}
-                    errorMessage={touched.description && errors.description}
-                  />
-                </View>
-
-                <HorizontalLine></HorizontalLine>
-                {/* Date Picker */}
-                <View style={styles.section} className='relative z-20'>
-                  <Text className="text-base text-gray-500 pb-2">Час початку</Text>
-                  {Platform.OS === 'web' ? (
-                    <DatePicker
-                      selected={values.startTime}
-                      onChange={(date: Date | null) => setFieldValue('startTime', date)}
-                      showTimeSelect
-                      dateFormat="Pp"
-                      locale={uk} // Set Ukrainian locale
-                    />
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.datePickerButton}
-                      onPress={() => { }}
-                    >
-                      <Text>{values.startTime ? values.startTime.toLocaleString('uk-UA') : 'Виберіть час початку'}</Text>
-                    </TouchableOpacity>
-                  )}
-
-                  <Text className="text-base text-gray-500 pb-2">Час закінчення</Text>
-                  {Platform.OS === 'web' ? (
-                    <DatePicker
-                      selected={values.endTime}
-                      onChange={(date: Date | null) => setFieldValue('endTime', date)}
-                      showTimeSelect
-                      dateFormat="Pp"
-                      locale={uk}
-                    />
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.datePickerButton}
-                      onPress={() => { }}
-                    >
-                      <Text>{values.endTime ? values.endTime.toLocaleString('uk-UA') : 'Виберіть час закінчення'}</Text>
-
-                      {/* {showStartTimePicker && (
-													<DateTimePicker
-														value={values.startTime || new Date()}
-														mode="datetime"
-														is24Hour={true}
-														display="default"
-														onChange={(e, selectedDate) => {
-															setFieldValue('startTime', selectedDate || values.startTime);
-															setShowStartTimePicker(false);
-														}}
-													/>
-												)} */}
-                    </TouchableOpacity>
-
-                  )}
-                </View>
-                <HorizontalLine></HorizontalLine>
-                {/* Event Type */}
-                <View style={styles.section}>
-                  <Text className="text-base text-gray-500 pb-2">Тип події</Text>
-                  <Picker
-                    selectedValue={values.eventType}
-                    onValueChange={handleChange('eventType')}
-                  >
-                    {EventTypeOptions.map((event) => (
-                      <Picker.Item key={event.value} label={event.label} value={event.value} />
-                    ))}
-                  </Picker>
-                  {touched.eventType && errors.eventType && <Text style={styles.errorText}>{errors.eventType}</Text>}
-                </View>
-
-                {/* Audience Picker */}
-                <View style={styles.section}>
-                  <Text className="text-base text-gray-500 pb-2">Цільова аудиторія</Text>
-                  <Picker
-                    selectedValue={values.targetAudience}
-                    onValueChange={handleChange('targetAudience')}
-                  >
-                    {AudienceOptions.map((audience) => (
-                      <Picker.Item key={audience.value} label={audience.label} value={audience.value} />
-                    ))}
-                  </Picker>
-                  {touched.targetAudience && errors.targetAudience && <Text style={styles.errorText}>{errors.targetAudience}</Text>}
-                </View>
-
-
-                {/* Price Field */}
-                <View style={styles.section}>
-                  <FormField
-                    title="Ціна"
-                    value={values.price.toString()}
-                    placeholder="Введіть ціну"
-                    keyboardType="numeric"
-                    handleChangeText={handleChange('price')}
-                    errorMessage={touched.price && errors.price}
-                  />
-                </View>
-                {/* Attendies Field */}
-                <View style={styles.section}>
-                  <FormField
-                    title="Кількість відвідувачів"
-                    value={values.maxAttendees.toString()}
-                    placeholder="Введіть кількість осіб"
-                    keyboardType="numeric"
-                    handleChangeText={handleChange('maxAttendees')}
-                    errorMessage={touched.maxAttendees && errors.maxAttendees}
-                  />
-                </View>
-                <HorizontalLine></HorizontalLine>
-                {/* Online Event Switch */}
-                <View style={styles.section}>
-                  <Text className="text-base text-gray-500 pb-2">Онлайн подія</Text>
-                  <Switch
-                    value={values.isOnline}
-                    onValueChange={(value: boolean) => {
-                      setFieldValue('isOnline', value); // Just update the form value
-                    }}
-                  />
-                  {/* Link field - only show if the event is online */}
-                  {values.isOnline && (
-                    <View style={styles.section}>
-                      <FormField
-                        title="Посилання на подію"
-                        value={values.link}
-                        placeholder="Введіть посилання на подію"
-                        handleChangeText={handleChange('link')}
-                        errorMessage={touched.link && errors.link}
-                      />
-                    </View>
-                  )}
-                </View>
-                {/* Location Info - Hide if event is online */}
-                {!values.isOnline && (
-                  <View style={styles.section}>
-                    <FormField
-                      title="Країна"
-                      value={values.country}
-                      placeholder="Введіть країну"
-                      handleChangeText={handleChange('country')}
-                      errorMessage={touched.country && errors.country}
-                    />
-                    <FormField
-                      title="Місто"
-                      value={values.city}
-                      placeholder="Введіть місто"
-                      handleChangeText={handleChange('city')}
-                      errorMessage={touched.city && errors.city}
-                    />
-                    <FormField
-                      title="Адреса"
-                      value={values.locationAddress}
-                      placeholder="Введіть адресу"
-                      handleChangeText={handleChange('locationAddress')}
-                      errorMessage={touched.locationAddress && errors.locationAddress}
-                    />
-                    <FormField
-                      title="Місце проведення"
-                      value={values.place}
-                      placeholder="Введіть назву місця"
-                      handleChangeText={handleChange('place')}
-                      errorMessage={touched.place && errors.place}
-                    />
-                  </View>
-                )}
-                <HorizontalLine></HorizontalLine>
-                {/* Image Upload */}
-                <View style={styles.section}>
-                  <Text className="text-base text-gray-500 pb-2">Завантажити зображення</Text>
-                  {/* <TouchableOpacity
-										style={styles.imagePickerButton}
-										onPress={() => handlePickImages(setFieldValue)}
-									>
-										<Text style={styles.imagePickerText}>Вибрати зображення</Text>
-									</TouchableOpacity> */}
-                  <CustomButton onPress={() => handlePickImages(setFieldValue)} isActive={false}>Вибрати зображення</CustomButton>
-                  {values.images.length > 0 && (
-                    <View style={styles.imagePreviewContainer}>
-                      {values.images.map((imageUri, index) => (
-                        <Image key={index} source={{ uri: imageUri }} style={styles.imagePreview} />
-                      ))}
-                    </View>
-                  )}
-                </View>
-
-                <CustomButton onPress={() => { handleSubmit() }}>Редагувати подію</CustomButton>
-              </View>
-            )}
-          </Formik>
+          <EventForm initialValues={initialValues} handleSubmit={handleSubmit} title='Редагувати подію'></EventForm>
         </View>
       </Container>
     </AuthGuard>
