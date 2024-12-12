@@ -44,7 +44,7 @@ export interface Event {
   availableSeats: number;
   price: number; // Price of the event
   customFields?: Record<string, any>; // Optional flexible custom fields
-  tags?: Tag[]; // Optional array of ObjectId strings
+  tags?: string[]; // Optional array of ObjectId strings
   isSaved?: boolean;
   isLiked?: boolean;
   booking?: {

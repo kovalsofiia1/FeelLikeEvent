@@ -2,41 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
-import { Formik, FormikHelpers } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomButton from '@/src/components/shared/CustomButton';
-import AuthGuard from '@/src/components/auth/AuthGuard';
-import Container from '@/src/components/shared/Container';
 import FormField from '@/src/components/shared/FormField';
 import DatePicker from 'react-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { uk } from 'date-fns/locale';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
-import { axiosInst } from '@/src/api/axiosSetUp';
-import { useRouter } from 'expo-router';
 import { AudienceOptions } from '@/src/constants/eventForm/audience';
 import { EventTypeOptions } from '@/src/constants/eventForm/eventTypes';
-import { Tag } from '@/src/redux/events/types';
-
-interface FormValues {
-  name: string;
-  description: string;
-  eventType: string;
-  tags: Tag[];
-  maxAttendees: number;
-  targetAudience: string;
-  isOnline: boolean;
-  country: string;
-  city: string;
-  locationAddress: string;
-  place: string;
-  price: number;
-  startTime: Date;
-  endTime: Date;
-  images: string[];
-  link: string
-}
+import TagsInput from './TagsInput';
+import { FormValues } from '@/src/types/eventForm';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Це поле є обов’язковим'),
@@ -103,7 +81,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
       allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
-      allowsMultipleSelection: false, // allows multiple images selection
+      allowsMultipleSelection: false,
     });
 
     if (!result.canceled) {
@@ -162,7 +140,11 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
                 <Text>{values.startTime ? values.startTime.toLocaleString('uk-UA') : 'Виберіть час початку'}</Text>
               </TouchableOpacity>
             )}
-
+            {touched.startTime && errors.startTime && (
+              <Text style={{ color: 'red' }}>
+                {String(errors.startTime)}
+              </Text>
+            )}
             <Text className="text-base text-gray-500 pb-2">Час закінчення</Text>
             {Platform.OS === 'web' ? (
               <DatePicker
@@ -194,6 +176,11 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
               </TouchableOpacity>
 
             )}
+            {touched.endTime && errors.endTime && (
+              <Text style={{ color: 'red' }}>
+                {String(errors.endTime)}
+              </Text>
+            )}
           </View>
           <HorizontalLine></HorizontalLine>
           {/* Event Type */}
@@ -224,6 +211,13 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
             {touched.targetAudience && errors.targetAudience && <Text style={styles.errorText}>{errors.targetAudience}</Text>}
           </View>
 
+          <TagsInput
+            tagsList={values.tags}
+            changeList={(value: string[]) => {
+              setFieldValue('tags', value)
+
+            }}
+          ></TagsInput>
 
           {/* Price Field */}
           <View style={styles.section}>
@@ -317,7 +311,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
             )}
           </View>
 
-          <CustomButton onPress={handleSubmit}>{title}</CustomButton>
+          <CustomButton onPress={() => { console.log(values, errors); handleSubmit() }}>{title}</CustomButton>
         </View>
       )}
     </Formik>

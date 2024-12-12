@@ -83,31 +83,7 @@ const CreateEventPage = () => {
 		} catch (err) {
 			console.log(err)
 			alert('Сталася помилка при створенні події!')
-			// router.push(`/events`)
 		}
-
-		// try {
-		// 	// Add images
-		// 	const imagePromises = values.images.map(async (uri, index) => {
-		// 		const fileType = uri.split('.').pop();
-		// 		const blob = await fetch(uri).then((res) => res.blob());
-		// 		formData.append('images', blob, `image_${index}.${fileType}`);
-		// 	});
-
-		// 	await Promise.all(imagePromises);
-
-		// 	// Log FormData (for debugging)
-		// 	console.log('FormData prepared.');
-
-		// 	// Submit the form
-		// 	const response = await axiosInst.post('/events', formData);
-
-		// 	const eventId = response.data.event._id;
-		// 	router.push(`/events/${eventId}`);
-		// } catch (err) {
-		// 	console.error('Error while creating event:', err);
-		// 	alert('Failed to create the event. Please try again.');
-		// }
 	};
 
 	const initialValues = {

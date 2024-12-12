@@ -1,25 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Picker } from '@react-native-picker/picker';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import CustomButton from '@/src/components/shared/CustomButton';
 import AuthGuard from '@/src/components/auth/AuthGuard';
 import Container from '@/src/components/shared/Container';
-import FormField from '@/src/components/shared/FormField';
-import DatePicker from 'react-datepicker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { uk } from 'date-fns/locale';
-import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
 import { axiosInst } from '@/src/api/axiosSetUp';
-import { router, useLocalSearchParams, useRouter } from 'expo-router';
-import { AudienceOptions } from '@/src/constants/eventForm/audience';
-import { EventTypeOptions } from '@/src/constants/eventForm/eventTypes';
+import { router, useLocalSearchParams } from 'expo-router';
 import { FormValues } from '@/src/types/eventForm';
 
-import { eventValidationSchema } from '@/src/types/eventForm';
 import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -53,35 +41,14 @@ const EditEventPage = () => {
     isOnline: !!currentEvent?.isOnline || false,
     link: currentEvent?.isOnline || '',
     price: currentEvent?.price || 0,
-    // country: '',
-    // city: '',
-    // locationAddress: '',
-    // place: '',
-    startTime: new Date(),
-    endTime: new Date(),
-
     country: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.country) : '',
     city: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.city) : '',
     locationAddress: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.address) : '',
     place: currentEvent?.location ? (typeof currentEvent?.location === 'string' ? currentEvent?.location : currentEvent?.location?.place) : '',
-    // startTime: new Date(currentEvent?.startDate || (new Date()).toISOString()),
-    // endTime: new Date(currentEvent?.endDate || (new Date()).toISOString()),
+    startTime: currentEvent?.startDate ? new Date(currentEvent.startDate) : new Date(),
+    endTime: currentEvent?.endDate ? new Date(currentEvent.endDate) : new Date(),
     images: currentEvent?.images || [],
   }
-
-  const handlePickImages = async (setFieldValue: any) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: false, // allows multiple images selection
-    });
-
-    if (!result.canceled) {
-      setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
-    }
-  };
 
   const handleSubmit = async (values: FormValues) => {
     try {
@@ -95,10 +62,9 @@ const EditEventPage = () => {
       formData.append('targetAudience', values.targetAudience);
       formData.append('price', values.price.toString());
       formData.append('totalSeats', values.maxAttendees.toString());
-      formData.append('tags', JSON.stringify(values.tags)); // Properly append tags
+      formData.append('tags', JSON.stringify(values.tags));
 
       if (values.isOnline) {
-        // formData.append('isOnline', 'true'); // Set true/false explicitly
         formData.append('isOnline', values.link);
         formData.append(
           'location',
@@ -114,7 +80,6 @@ const EditEventPage = () => {
             place: values.place,
           })
         );
-        // formData.append('isOnline', '')
       }
 
       formData.append('startDate', values.startTime.toISOString());

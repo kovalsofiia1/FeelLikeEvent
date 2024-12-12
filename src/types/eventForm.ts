@@ -5,7 +5,7 @@ export interface FormValues {
   name: string;
   description: string;
   eventType: string;
-  tags: Tag[];
+  tags: string[];
   maxAttendees: number;
   targetAudience: string;
   isOnline: boolean;
