@@ -1,79 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
-// import { Link, router } from 'expo-router';
-// import Container from '@/src/components/shared/Container';
-// import FormField from '@/src/components/shared/FormField';
-// import EventsFilters from '@/src/components/events/EventsFilters';
-// import CustomButton from '@/src/components/shared/CustomButton';
-// import EventList from '@/src/components/events/EventList';
-// import { icons } from '@/src/constants';
-// import { fetchEvents } from '@/src/redux/events/actions';
-// import { selectEvents, selectTopEvents } from '@/src/redux/events/selectors';
-// import { AppDispatch } from '@/src/redux/store';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
-// import { selectIsLoggedIn } from '@/src/redux/user/selectors';
-// import { axiosInst } from '@/src/api/axiosSetUp';
-// const EventsPage = () => {
-//     const [isFavorite, setIsFavorite] = useState(false);
-//     const [searchQuery, setSearchQuery] = useState<string>('');
-//     const isLoggedIn = useSelector(selectIsLoggedIn);
-//     const dispatch = useDispatch<AppDispatch>();
-//     const events = useSelector(selectEvents);
-
-//     useEffect(() => {
-//         dispatch(fetchEvents(1));
-//     }, [])
-
-//     const handleSearch = (query: string): void => {
-//         setSearchQuery(query);
-//     }
-
-//     const handleAdd = () => {
-//         if (!isLoggedIn) {
-//             handleNotLoggedIn();
-//         }
-//         else {
-//             router.push('/events/create')
-//         }
-//     }
-
-
-//     return (
-//         <Container>
-//             <View className='flex justify-between align-center py-4'>
-//                 <Text className="text-3xl text-blue-500 font-bold">Усі події</Text>
-//                 <FormField
-//                     placeholder='Шукайте події'
-//                     value={searchQuery}
-//                     handleChangeText={(e) => handleSearch(e)}
-//                     keyboardType="default"
-//                 />
-//             </View>
-
-//             <EventsFilters></EventsFilters>
-
-//             <View className='flex flex-row gap-2 justify-end items-center'>
-//                 <TouchableOpacity onPress={() => { setIsFavorite((prevState) => !prevState) }}>
-//                     <Image
-//                         source={isFavorite ? icons.redHeart : icons.heart}
-//                         resizeMode='contain'
-//                         style={{ width: 24, height: 24 }}
-//                     />
-//                 </TouchableOpacity>
-//                 <CustomButton onPress={() => { handleAdd() }} additionalStyles='px-3'>+</CustomButton>
-//             </View>
-
-//             <Text className='font-bold text-xl text-center'>{isFavorite ? 'Улюблені події' : 'Усі події'}</Text>
-//             <EventList eventsList={events.events} />
-//         </Container>
-//     );
-// };
-
-// export default EventsPage;
-
-// const styles = StyleSheet.create({})
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
@@ -96,23 +20,39 @@ const EventsPage = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [isLoading, setIsLoading] = useState(false); // Track loading state
+    const [filters, setFilters] = useState<any>({}); // Track selected filters
+
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const dispatch = useDispatch<AppDispatch>();
     const events = useSelector(selectEvents);
 
     useEffect(() => {
-        fetchEventsData(currentPage); // Fetch events when page changes
-    }, [currentPage]);
+        fetchEventsData(currentPage, filters); // Fetch events when page or filters change
+    }, [currentPage, filters, searchQuery]);
 
-    const fetchEventsData = (page: number) => {
+    const fetchEventsData = (page: number, filters: any) => {
         setIsLoading(true);
-        dispatch(fetchEvents(page))
+
+        // Combine pagination, search query, and filters into the API request
+        const params = {
+            page,
+            pageSize: 10,
+            searchQuery,
+            ...filters,
+        };
+
+        dispatch(fetchEvents(params))
             .then(() => setIsLoading(false)) // Set loading to false after events are fetched
             .catch(() => setIsLoading(false));
     };
 
     const handleSearch = (query: string): void => {
         setSearchQuery(query);
+    };
+
+    const handleFiltersChange = (newFilters: any) => {
+        setFilters(newFilters); // Update filters state when filters change
+        setCurrentPage(1); // Reset to the first page
     };
 
     const handleAdd = () => {
@@ -145,7 +85,7 @@ const EventsPage = () => {
                 />
             </View>
 
-            <EventsFilters />
+            <EventsFilters onFiltersChange={handleFiltersChange} />
 
             <View className="flex flex-row gap-2 justify-end items-center">
                 <TouchableOpacity onPress={() => { setIsFavorite((prevState) => !prevState); }}>
@@ -167,9 +107,9 @@ const EventsPage = () => {
                 </View>
             ) : (
                 <>{
-                    !events.events ?
+                    !events.events.length ?
                         <View className='flex flex-1 justify-center items-center'>
-                            <Text className='text-bold text-3xl text-blue-500'>На жаль, не знайдено подій за вашим запитом!</Text>
+                            <Text className='text-bold text-3xl text-center text-blue-500'>На жаль, не знайдено подій за вашим запитом!</Text>
                         </View>
                         :
                         <>

@@ -11,13 +11,13 @@ const TopEvents = () => {
     const dispatch = useDispatch<AppDispatch>();
     const topEvents = useSelector(selectEvents);
     useEffect(() => {
-        dispatch(fetchEvents());
+        dispatch(fetchEvents({ page: 1 }));
     }, [])
     return (
         <View>
             <Text className={`text-xl text-center mb-2 font-bold`}>Найпопулярніші події</Text>
             <Link href="/events" className='text-md underline text-right text-gray-400'>Переглянути усі</Link>
-            <EventList eventsList={topEvents}></EventList>
+            <EventList eventsList={topEvents.events}></EventList>
         </View >
     )
 }
