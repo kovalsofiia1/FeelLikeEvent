@@ -8,9 +8,6 @@ export const fetchEvents = createAsyncThunk(
   "events/fetchEvents",
   async (params: {}, { rejectWithValue }) => {
     try {
-      // You can include page and pageSize as query parameters in the URL
-      const pageSize = isWeb ? 8 : 4; // or get it dynamically if needed
-
       const response = await axiosInst.get(`/events`, { params });
 
       return response.data;

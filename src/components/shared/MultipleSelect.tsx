@@ -18,7 +18,7 @@ const MultipleSelect: React.FC<Props> = ({ title, items, selectedItems, setSelec
     const [open, setOpen] = useState(false);
 
     return (
-        <View>
+        <View className=''>
             <DropDownPicker
                 open={open}
                 value={selectedItems}
@@ -40,7 +40,7 @@ const MultipleSelect: React.FC<Props> = ({ title, items, selectedItems, setSelec
                 }}
                 textStyle={{ color: 'black' }}
                 dropDownContainerStyle={{
-                    backgroundColor: '#1E3A8A',
+                    backgroundColor: 'grey',
                     zIndex: open ? 1000 : 1,
                 }}
                 listMode="MODAL"

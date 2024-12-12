@@ -15,6 +15,7 @@ import { selectIsLoggedIn } from '@/src/redux/user/selectors';
 import EventItem from '@/src/components/events/EventItem';
 import EventList from '@/src/components/events/EventList';
 import useDebounce from '@/src/hooks/useDebounce';
+import { isWeb } from '@/src/utils/storage';
 
 const EventsPage = () => {
     const [isFavorite, setIsFavorite] = useState(false);
@@ -30,7 +31,7 @@ const EventsPage = () => {
 
     useEffect(() => {
         fetchEventsData(currentPage, filters); // Fetch events when page or filters change
-    }, [currentPage, filters, debouncedSearchQuery]);
+    }, [currentPage, filters, debouncedSearchQuery, isFavorite]);
 
     const fetchEventsData = (page: number, filters: any) => {
         setIsLoading(true);
@@ -38,8 +39,9 @@ const EventsPage = () => {
         // Combine pagination, search query, and filters into the API request
         const params = {
             page,
-            pageSize: 10,
+            pageSize: isWeb ? 8 : 4,
             searchQuery,
+            saved: isFavorite.toString(),
             ...filters,
         };
 
