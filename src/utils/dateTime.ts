@@ -9,6 +9,7 @@
 // }
 
 export function getDate(isoString: string) {
+  if (!isoString) return;
   const date = new Date(isoString);
   const formattedDate = new Intl.DateTimeFormat('uk-UA', {
     day: '2-digit',

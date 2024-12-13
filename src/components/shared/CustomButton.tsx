@@ -36,9 +36,9 @@ const CustomButton = ({ children, onPress, additionalStyles = '', isLoading, isA
             disabled={isLoading || isDisabled}
 
         >
-            {/* <Text className={`${isActive ? 'text-white hover:text-slate-500' : 'text-slate-500 hover:text-white'} text-md text-center align-middle ${textAdditionalStyles}`}> */}
-            {children}
-            {/* </Text> */}
+            <Text className={`${isActive ? 'text-white hover:text-slate-500' : 'text-slate-500 hover:text-white'} text-md text-center align-middle ${textAdditionalStyles}`}>
+                {children}
+            </Text>
         </TouchableOpacity>
     );
 }

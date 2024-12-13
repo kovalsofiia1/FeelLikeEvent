@@ -19,11 +19,9 @@ const Header = () => {
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector(selectUser);
     const [shouldShowControls, setShouldShowControls] = useState(false);
-    console.log(segments)
-    // Dynamically determine if controls should be shown
+
     useEffect(() => {
         setShouldShowControls(!isLoggedIn && !isAuthPage);
-        console.log(!isLoggedIn && !isAuthPage);
     }, [isLoggedIn, isAuthPage]); // The component re-renders when these values change
 
     const handlePress = () => {

@@ -120,3 +120,17 @@ export const commentEvent = createAsyncThunk(
     }
   }
 );
+
+
+export const changeEventStatus = createAsyncThunk(
+  "events/changeEventStatus",
+  async ({ eventId, action }: { eventId: string, action: "decline" | "verify" }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInst.patch(`/events/${eventId}/${action}`);
+
+      return response.data.event;
+    } catch {
+      return rejectWithValue("Failed to comment the event");
+    }
+  }
+);

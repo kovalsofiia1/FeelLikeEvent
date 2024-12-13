@@ -1,91 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { Event } from "@/src/redux/events/types";
 import { getDate } from "@/src/utils/dateTime";
-import useDebounce from "@/src/hooks/useDebounce";
-import { fetchEvents } from "@/src/redux/events/actions";
-import { selectEvents } from "@/src/redux/events/selectors";
+import { changeEventStatus, fetchEvents } from "@/src/redux/admin/actions";
+import { selectEvents } from "@/src/redux/admin/selectors";
 import { AppDispatch } from "@/src/redux/store";
 import { selectIsLoggedIn } from "@/src/redux/user/selectors";
-import { isWeb } from "@/src/utils/storage";
 import { useSelector, useDispatch } from "react-redux";
 import CustomButton from "../shared/CustomButton";
 import Container from "../shared/Container";
-// Example data with the default status as 'created'
-const mockEvents: Event[] = [
-  {
-    _id: "1",
-    name: "Concert",
-    description: "A live concert event.",
-    startDate: "2024-12-20T19:00:00Z",
-    endDate: "2024-12-20T22:00:00Z",
-    location: {
-      country: "USA",
-      city: "New York",
-      address: "123 Main St",
-      place: "Madison Square Garden"
-    },
-    images: ["image_url_1", "image_url_2"],
-    totalSeats: 1000,
-    availableSeats: 200,
-    price: 50,
-    eventStatus: "CREATED", // default status
-    targetAudience: "ADULTS",
-    createdBy: {
-      _id: "creator1",
-      name: "John Doe",
-      avatarURL: "avatar_url_1"
-    }
-  },
-  {
-    _id: "2",
-    name: "Art Workshop",
-    description: "A creative art workshop.",
-    startDate: "2024-12-21T10:00:00Z",
-    endDate: "2024-12-21T14:00:00Z",
-    location: "Online",
-    images: ["image_url_3"],
-    totalSeats: 50,
-    availableSeats: 50,
-    price: 30,
-    eventStatus: "CREATED", // default status
-    targetAudience: "KIDS",
-    createdBy: {
-      _id: "creator2",
-      name: "Jane Smith",
-      avatarURL: "avatar_url_2"
-    }
-  }
-];
 
 const EventTable = () => {
   const router = useRouter();
-  // const [events, setEvents] = useState(mockEvents);
-
-  const handleChangeStatus = (id: string, status: string) => {
-    console.log(`Change status for event ID: ${id} to ${status}`);
-    // setEvents(events.map(event =>
-    //   event._id === id ? { ...event, eventStatus: status } : event
-    // ));
-  };
-
-  // const [isFavorite, setIsFavorite] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
   const [isLoading, setIsLoading] = useState(false); // Track loading state
-  const [filters, setFilters] = useState<any>({}); // Track selected filters
-  // const debouncedSearchQuery = useDebounce(searchQuery, 500);
-
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch<AppDispatch>();
   const events = useSelector(selectEvents);
 
   useEffect(() => {
-    fetchEventsData(currentPage, filters); // Fetch events when page or filters change
+    fetchEventsData(currentPage);
   }, [currentPage]);
 
-  const fetchEventsData = (page: number, filters: any) => {
+  const fetchEventsData = (page: number) => {
     setIsLoading(true);
 
     // Combine pagination, search query, and filters into the API request
@@ -109,6 +46,14 @@ const EventTable = () => {
     }
   };
 
+  const handleChangeStatus = (id: string, action: 'decline' | 'verify') => {
+    dispatch(changeEventStatus({ eventId: id, action }))
+      .catch(() => {
+        alert("Сталася помилка при зміні статусу!")
+      })
+  };
+
+
   return (
     <Container>
       <Text style={styles.header}>Події</Text>
@@ -120,6 +65,7 @@ const EventTable = () => {
           <Text style={styles.cell} className="font-bold">Місце</Text>
           <Text style={styles.cell} className="font-bold">К-сть місць</Text>
           <Text style={styles.cell} className="font-bold">Ціна</Text>
+          <Text style={styles.cell} className="font-bold">Тип</Text>
           <Text style={styles.cell} className="font-bold">Статус</Text>
         </View>
         {events.events && events.events.map((event) => (
@@ -130,12 +76,13 @@ const EventTable = () => {
             <Text style={styles.cell}>{event.location ? (typeof event.location === 'string' ? event.location : `${event.location.city}, ${event.location.country}`) : "N/A"}</Text>
             <Text style={styles.cell}>{event.totalSeats}</Text>
             <Text style={styles.cell}>{event.price} грн.</Text>
+            <Text style={styles.cell}>{event.eventType}</Text>
             <Text style={styles.cell}>{event.eventStatus}</Text>
 
-            <View style={styles.statusButtons}>
+            <View style={styles.statusButtons} className="w-[212px]">
               <CustomButton additionalStyles="px-1" onPress={() => router.push(`/events/${event._id}`)}>Деталі</CustomButton>
-              <CustomButton additionalStyles="px-1 bg-green-600" onPress={() => handleChangeStatus(event._id, "verified")}>Схвалити</CustomButton>
-              <CustomButton additionalStyles="bg-red-600 px-1" onPress={() => handleChangeStatus(event._id, "declined")}>Відхилити</CustomButton>
+              {<CustomButton additionalStyles="px-1 bg-green-600" onPress={() => handleChangeStatus(event._id, "verify")}>Схвалити</CustomButton>}
+              {<CustomButton additionalStyles="bg-red-600 px-1" onPress={() => handleChangeStatus(event._id, "decline")}>Відхилити</CustomButton>}
             </View>
           </View>
         ))}

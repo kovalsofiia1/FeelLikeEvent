@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";;
 import { Event, EventComment } from "./types";
-import { bookEvent, commentEvent, deleteEventById, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
+import { bookEvent, changeEventStatus, commentEvent, deleteEventById, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
 interface EventState {
   events: {
@@ -120,11 +120,9 @@ const eventSlice = createSlice({
       })
       .addCase(commentEvent.fulfilled, (state, action: PayloadAction<{ comment: EventComment }>) => {
         if (state.currentEvent && state.currentEvent._id === action.payload.comment.eventId) {
-          // Here we expect the payload to be { comment: EventComment }
           state.currentEventComments = [action.payload.comment, ...state.currentEventComments];
         }
-      });
-
+      })
   },
 });
 
