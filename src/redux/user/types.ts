@@ -7,10 +7,14 @@ type UserStatus = 'USER' | 'ADMIN' | 'VERIFIED_USER';
 export interface User {
   _id: string;
   name: string;
+  description?: string;
   email: string;
   avatarURL?: string | null;
   status: UserStatus;
-  interests: []
+  interests: string[];
+  dateOfBirth?: string;
+  phoneNumber?: string;
+
 }
 
 // Define the initial state structure for the user slice

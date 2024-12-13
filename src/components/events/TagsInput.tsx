@@ -6,10 +6,12 @@ import { Tag } from '@/src/redux/events/types';
 
 interface Props {
   tagsList: string[],
-  changeList: (val: string[]) => void
+  changeList: (val: string[]) => void,
+  showMessage?: boolean,
+  title?: string
 }
 
-const TagsInput = ({ tagsList, changeList }: Props) => {
+const TagsInput = ({ tagsList, changeList, title = 'Тег', showMessage = true }: Props) => {
   const [tag, setTag] = useState<string>('');
   const [tags, setTags] = useState<string[]>(tagsList);
 
@@ -33,10 +35,10 @@ const TagsInput = ({ tagsList, changeList }: Props) => {
   return (
     <View style={styles.container}>
       {/* Input and Add Button */}
-      <Text className="text-base text-gray-500 pb-2">Додайте теги до події, щоб користувачі могли легше вас знайти</Text>
+      {showMessage && <Text className="text-base text-gray-500 pb-2">Додайте теги до події, щоб користувачі могли легше вас знайти</Text>}
       <View className="flex flex-row gap-2 items-center pb-4">
         <FormField
-          title="Тег"
+          title={title}
           value={tag}
           placeholder="Введіть тег"
           keyboardType="default"
@@ -50,7 +52,7 @@ const TagsInput = ({ tagsList, changeList }: Props) => {
 
       <ScrollView style={styles.tagList}>
         <View className='flex flex-row flex-wrap gap-2'>
-          {tags.map((item, index) => (
+          {tags && tags.map((item, index) => (
             <View className="text-sm bg-blue-200 rounded-full px-2 py-1 text-gray-600 mr-2 min-w-8 text-center flex flex-row gap-1" key={item}>
               <Text style={styles.tagText}>{item}</Text>
               <TouchableOpacity onPress={() => removeTag(index)}>
