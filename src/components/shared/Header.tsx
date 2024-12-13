@@ -6,12 +6,16 @@ import { router, useRouter, useSegments } from 'expo-router'
 import { icons } from '@/src/constants'
 import { useSelector } from 'react-redux'
 import { selectIsLoggedIn } from '@/src/redux/user/selectors'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/src/redux/store'
+import { logOut } from '@/src/redux/user/actions'
 
 const Header = () => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const segments = useSegments();
     const router = useRouter();
     const isAuthPage = segments.join('/') === '(auth)/sign-in' || segments.join('/') === '(auth)/sign-up';
+    const dispatch = useDispatch<AppDispatch>();
 
     const [shouldShowControls, setShouldShowControls] = useState(false);
 
@@ -30,6 +34,19 @@ const Header = () => {
         }
     };
 
+    const logout = async () => {
+
+        dispatch(logOut())
+            .unwrap()
+            .then(() => {
+                router.push('/home');
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
+    }
+
     return (
         <View className='flex flex-row justify-between items-center px-4 py-2 flex-wrap gap-1'>
             <View className='flex flex-row gap-2 items-center'>
@@ -46,8 +63,8 @@ const Header = () => {
             </View>
             {shouldShowControls && <View className='flex flex-row gap-2 justify-end items-center'>
                 <CustomButton onPress={() => { router.push('/sign-in') }} isActive={false} additionalStyles='w-auto px-3'>Увійти</CustomButton>
-                {/* <CustomButton onPress={() => { router.push('/sign-up') }} additionalStyles='w-auto px-3'>Зареєструватися</CustomButton> */}
             </View>}
+            {isLoggedIn && <CustomButton isActive={false} onPress={() => logout()}>Вийти</CustomButton>}
         </View>
     )
 }

@@ -28,19 +28,6 @@ const Profile = () => {
         }
     }, [isLoggedIn, dispatch]);
 
-    const logout = async () => {
-
-        dispatch(logOut())
-            .unwrap()
-            .then(() => {
-                router.push('/home');
-            })
-            .catch(() => {
-                alert(error);
-            });
-
-    }
-
     const handleSave = (updatedProfile: any) => {
         setUserProfile(updatedProfile);
         setIsEditing(false);
