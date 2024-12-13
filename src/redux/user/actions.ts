@@ -2,6 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInst, setAuthHeader, clearAuthHeader } from '../../api/axiosSetUp';
 import { deleteItem, getItem, setItem } from '@/src/utils/storage';
+import { UpdateUser, User } from './types';
 
 const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY || "mykey";
 
@@ -99,7 +100,7 @@ export const fetchUserData = createAsyncThunk(
   async (userId: string) => {
     try {
       const response = await axiosInst.post(`/user/${userId}`, {});
-      return await response.data;
+      return response.data;
     } catch (error) {
       throw new Error('Failed to fetch user data');
     }
@@ -111,9 +112,26 @@ export const fetchMyData = createAsyncThunk(
   async () => {
     try {
       const response = await axiosInst.get(`/user/me`, {});
-      return await response.data;
+      return response.data;
     } catch (error) {
       throw new Error('Failed to fetch user data');
+    }
+  }
+);
+
+
+export const updateMyData = createAsyncThunk(
+  'user/updateMyData',
+  async (userData: UpdateUser, thunkAPI) => {
+    try {
+      console.log(userData)
+      const response = await axiosInst.put(`/user/me`, userData);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return thunkAPI.rejectWithValue(error.message);
+      }
+      return thunkAPI.rejectWithValue('Сталася помилка під час редагування профіля');
     }
   }
 );

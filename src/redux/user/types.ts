@@ -14,8 +14,18 @@ export interface User {
   interests: string[];
   dateOfBirth?: string;
   phoneNumber?: string;
-
 }
+
+export interface UpdateUser {
+  name: string;
+  description?: string;
+  email: string;
+  interests?: string;
+  dateOfBirth?: string;
+  phoneNumber?: string;
+}
+
+
 
 // Define the initial state structure for the user slice
 export interface UserState {

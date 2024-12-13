@@ -4,13 +4,13 @@ import CustomButton from '@/src/components/shared/CustomButton'
 import { Redirect, router } from 'expo-router';
 import AuthGuard from '@/src/components/auth/AuthGuard';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyData, fetchUserData, logOut } from '@/src/redux/user/actions';
+import { fetchMyData, fetchUserData, logOut, updateMyData } from '@/src/redux/user/actions';
 import { selectUser, selectLoading, selectError, selectIsLoggedIn } from '@/src/redux/user/selectors';
 import { AppDispatch } from '@/src/redux/store';
 import ProfileInfoDisplay from '@/src/components/profile/ProfileInfoDisplay';
 import ProfileEditForm from '@/src/components/profile/ProfileEditForm';
 import Container from '@/src/components/shared/Container';
-import { User } from '@/src/redux/user/types';
+import { UpdateUser, User, UserState } from '@/src/redux/user/types';
 
 const Profile = () => {
 
@@ -28,9 +28,26 @@ const Profile = () => {
         }
     }, [isLoggedIn, dispatch]);
 
-    const handleSave = (updatedProfile: any) => {
-        setUserProfile(updatedProfile);
-        setIsEditing(false);
+    const handleSave = (updatedProfile: User) => {
+        console.log(updatedProfile)
+        const profile = {
+            name: updatedProfile.name,
+            email: updatedProfile.email,
+            ...(updatedProfile.description && { description: updatedProfile.description }),
+            ...(updatedProfile.phoneNumber && { description: updatedProfile.phoneNumber }),
+            ...(updatedProfile.dateOfBirth && { dateOfBirth: new Date(updatedProfile.dateOfBirth).toISOString() }),
+            ...(updatedProfile.interests && updatedProfile.interests.length > 0 && { interests: JSON.stringify(updatedProfile.interests) }),
+        };
+
+        dispatch(updateMyData(profile))
+            .then(() => {
+                setIsEditing(false);
+            })
+            .catch(() => {
+                alert("Сталася помилка при спробі оновити профіль!")
+            })
+        // setUserProfile(updatedProfile);
+
     };
 
     const handleCancel = () => {
@@ -42,17 +59,17 @@ const Profile = () => {
         <AuthGuard>
             <Container>
                 <View>
-                    {userProfile && <>
+                    {user && <>
                         {isEditing ? (
                             <ProfileEditForm
-                                userProfile={userProfile}
+                                userProfile={user}
                                 onSave={handleSave}
                                 onCancel={handleCancel}
                             />
                         ) : (
-                            <View>
-                                <ProfileInfoDisplay userProfile={userProfile} />
-                                <Button title="Edit Profile" onPress={() => setIsEditing(true)} />
+                            <View className='flex'>
+                                <CustomButton onPress={() => setIsEditing(true)} additionalStyles='self-end'>Редагувати</CustomButton>
+                                <ProfileInfoDisplay userProfile={user} />
                             </View>
                         )}
                     </>

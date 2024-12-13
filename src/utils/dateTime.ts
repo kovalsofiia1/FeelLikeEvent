@@ -3,9 +3,20 @@
  * @param {string} isoString - The ISO date string.
  * @returns {string} - Formatted date in 'YYYY-MM-DD' format.
  */
+// export function getDate(isoString: string) {
+//   const date = new Date(isoString);
+//   return date.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+// }
+
 export function getDate(isoString: string) {
   const date = new Date(isoString);
-  return date.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+  const formattedDate = new Intl.DateTimeFormat('uk-UA', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date);
+
+  return formattedDate.replace(/\//g, '.'); // Ensure dots as separators
 }
 
 /**

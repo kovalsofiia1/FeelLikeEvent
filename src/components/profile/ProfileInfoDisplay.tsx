@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import TagsList from "../shared/tags/TagsList";
 import { User } from "@/src/redux/user/types";
 import HorizontalLine from "../shared/elements/HorizontalLine";
+import { getDate } from "@/src/utils/dateTime";
 
 type ProfileInfoDisplayProps = {
   userProfile: User
@@ -26,8 +27,12 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
             <Text className="text-lg font-bold">{userProfile.name}</Text>
           </Text>
           <Text className="flex flex-col mb-2">
+            <Text className="text-base text-gray-500 pb-2">Статус</Text>
+            <Text className="text-lg font-bold">{userProfile.status}</Text>
+          </Text>
+          <Text className="flex flex-col mb-2">
             <Text className="text-base text-gray-500 pb-2">Про мене</Text>
-            <Text className="text-lg font-bold"> {userProfile.description ? userProfile.description : '-'}</Text>
+            <Text className="text-lg font-bold">{userProfile.description ? userProfile.description : '-'}</Text>
           </Text>
         </View>
 
@@ -47,13 +52,13 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
         </Text>
         <Text className="flex flex-col mb-2">
           <Text className="text-base text-gray-500 pb-2">Дата народження</Text>
-          <Text className="text-md font-bold">{userProfile.dateOfBirth ? userProfile.dateOfBirth : '-'}</Text>
+          <Text className="text-md font-bold">{userProfile.dateOfBirth ? getDate(userProfile.dateOfBirth) : '-'}</Text>
         </Text>
       </View>
       <Text className="flex flex-col mb-2">
         <Text className="text-base text-gray-500 pb-2">Інтереси: </Text>
         {
-          userProfile.interests ?
+          userProfile.interests.length ?
             <TagsList tags={userProfile.interests} />
             :
             <Text>У користувача поки немає доданих інтересів</Text>

@@ -1,6 +1,6 @@
 // src/redux/user/reducer.ts
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMyData, fetchUserData, loadTokenFromStorage, logIn, logOut, register } from './actions';
+import { fetchMyData, loadTokenFromStorage, logIn, logOut, register, updateMyData } from './actions';
 import { UserState } from './types';
 
 const initialState: UserState = {
@@ -81,6 +81,18 @@ const userSlice = createSlice({
       })
       .addCase(fetchMyData.rejected, (state, action) => {
         state.error = action.error.message || 'Failed to fetch data';
+        state.loading = false;
+      })
+      .addCase(updateMyData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateMyData.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(updateMyData.rejected, (state, action) => {
+        state.error = action.error.message || 'Failed to update data';
         state.loading = false;
       });
   },
