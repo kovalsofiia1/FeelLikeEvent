@@ -13,9 +13,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // For web
 import { uk } from "date-fns/locale";
 import DateTimePickerModal from "react-native-modal-datetime-picker"; // For mobile
+import * as ImagePicker from 'expo-image-picker';
+import { DEFAULT_EVENT_IMAGE } from "@/src/constants/defaultImagePath";
 
-// Регулярний вираз для номера телефону (приклад для українських номерів)
-const phonePattern = /^(?:\+380\d{9}|\d{10})$/;
 
 // Валідація з використанням Yup
 const validationSchema = Yup.object().shape({
@@ -51,6 +51,22 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
   };
 
 
+  const handlePickImages = async (setFieldValue: any) => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [3, 3],
+      quality: 1,
+      allowsMultipleSelection: false,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      const imageUri = result.assets[0].uri;
+      setFieldValue('avatarURL', imageUri);
+    }
+  };
+
+
   return (
     <Formik
       initialValues={{
@@ -60,6 +76,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
         email: userProfile.email || '',
         phoneNumber: userProfile.phoneNumber || '',
         interests: userProfile.interests || [],
+        avatarURL: userProfile.avatarURL || ''
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => onSave(values)}
@@ -74,9 +91,15 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
       }) => (
         <View className="p-5 max-w-[600px] w-full ml-auto mr-auto flex gap-4">
           <Text className="font-bold text-blue-500 text-xl mb-4">Редагування профілю</Text>
+
           <View className="ml-auto mr-auto">
-            <Image source={{ uri: userProfile?.avatarURL || '' }} className="border w-[200px] h-[200px] rounded-xl mb-4" />
-            <CustomButton onPress={() => { }}>Змінити фото профілю</CustomButton>
+            <Image
+              source={values.avatarURL ? { uri: values.avatarURL } : { uri: DEFAULT_EVENT_IMAGE }}
+              className="border border-gray-300 w-[200px] h-[200px] rounded-3xl mb-4"
+            />
+            <CustomButton onPress={() => handlePickImages(setFieldValue)} isActive={true}>
+              Вибрати зображення
+            </CustomButton>
           </View>
 
           <FormField
@@ -168,6 +191,18 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
     marginTop: 10,
+  },
+  imagePreviewContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   input: {
     borderWidth: 1,

@@ -28,26 +28,61 @@ const Profile = () => {
         }
     }, [isLoggedIn, dispatch]);
 
-    const handleSave = (updatedProfile: User) => {
-        console.log(updatedProfile)
-        const profile = {
-            name: updatedProfile.name,
-            email: updatedProfile.email,
-            ...(updatedProfile.description && { description: updatedProfile.description }),
-            ...(updatedProfile.phoneNumber && { description: updatedProfile.phoneNumber }),
-            ...(updatedProfile.dateOfBirth && { dateOfBirth: new Date(updatedProfile.dateOfBirth).toISOString() }),
-            ...(updatedProfile.interests && updatedProfile.interests.length > 0 && { interests: JSON.stringify(updatedProfile.interests) }),
-        };
+    const handleSave = async (updatedProfile: User) => {
+        try {
+            console.log(updatedProfile);
 
-        dispatch(updateMyData(profile))
-            .then(() => {
-                setIsEditing(false);
-            })
-            .catch(() => {
-                alert("Сталася помилка при спробі оновити профіль!")
-            })
-        // setUserProfile(updatedProfile);
+            const formData = new FormData();
 
+            // Add text fields to FormData
+            formData.append("name", updatedProfile.name);
+            formData.append("email", updatedProfile.email);
+
+            if (updatedProfile.description) {
+                formData.append("description", updatedProfile.description);
+            }
+
+            if (updatedProfile.phoneNumber) {
+                formData.append("phoneNumber", updatedProfile.phoneNumber);
+            }
+
+            if (updatedProfile.dateOfBirth) {
+                formData.append("dateOfBirth", new Date(updatedProfile.dateOfBirth).toISOString());
+            }
+
+            if (updatedProfile.interests && updatedProfile.interests.length > 0) {
+                formData.append("interests", JSON.stringify(updatedProfile.interests));
+            }
+
+            // Handle avatar image
+            if (updatedProfile.avatarURL) {
+                // Convert image URI to blob and append it
+                const blob = await fetch(updatedProfile.avatarURL).then((res) => res.blob());
+                formData.append("avatars", blob, "avatar.jpg");
+            }
+
+            // const imagePromises = updatedProfile.avatarURL.map(async (uri, index) => {
+            //     const blob = await fetch(uri).then((res) => res.blob());
+            //     formData.append('avatars', blob, `image_${index}.jpg`);
+            // });
+
+            // await Promise.all(imagePromises);
+            // Log FormData contents (for debugging)
+            for (const [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+
+            // Dispatch the updateMyData action with the FormData
+            dispatch(updateMyData(formData))
+                .then(() => {
+                    setIsEditing(false);
+                })
+                .catch(() => {
+                    alert("Сталася помилка при спробі оновити профіль!");
+                });
+        } catch (error) {
+            console.error("Error while saving profile:", error);
+        }
     };
 
     const handleCancel = () => {

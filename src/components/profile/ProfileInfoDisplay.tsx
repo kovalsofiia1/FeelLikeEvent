@@ -4,6 +4,7 @@ import TagsList from "../shared/tags/TagsList";
 import { User } from "@/src/redux/user/types";
 import HorizontalLine from "../shared/elements/HorizontalLine";
 import { getDate } from "@/src/utils/dateTime";
+import { DEFAULT_AVATAR_IMAGE } from "@/src/constants/defaultImagePath";
 
 type ProfileInfoDisplayProps = {
   userProfile: User
@@ -20,7 +21,7 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
         <HorizontalLine></HorizontalLine>
       </View>
       <View className="flex flex-row gap-8 items-start flex-wrap">
-        <Image source={{ uri: userProfile?.avatarURL || '' }} className="border w-[200px] h-[200px] rounded-xl" />
+        <Image source={{ uri: userProfile?.avatarURL || DEFAULT_AVATAR_IMAGE }} className="border border-gray-300 w-[200px] h-[200px] rounded-xl" />
         <View >
           <Text className="flex flex-col mb-2">
             <Text className="text-base text-gray-500 pb-2">Ім'я</Text>
@@ -58,7 +59,7 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
       <Text className="flex flex-col mb-2">
         <Text className="text-base text-gray-500 pb-2">Інтереси: </Text>
         {
-          userProfile.interests.length ?
+          userProfile.interests && userProfile.interests.length ?
             <TagsList tags={userProfile.interests} />
             :
             <Text>У користувача поки немає доданих інтересів</Text>

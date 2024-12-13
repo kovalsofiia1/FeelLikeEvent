@@ -119,13 +119,16 @@ export const fetchMyData = createAsyncThunk(
   }
 );
 
-
 export const updateMyData = createAsyncThunk(
   'user/updateMyData',
-  async (userData: UpdateUser, thunkAPI) => {
+  async (formData: FormData, thunkAPI) => {
     try {
-      console.log(userData)
-      const response = await axiosInst.put(`/user/me`, userData);
+      console.log("Submitting profile update with FormData:", formData);
+      const response = await axiosInst.put(`/user/me`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
