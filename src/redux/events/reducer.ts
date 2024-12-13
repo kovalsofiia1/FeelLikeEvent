@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";;
 import { Event, EventComment } from "./types";
-import { bookEvent, changeEventStatus, commentEvent, deleteEventById, fetchEvents, getEventById, likeEvent, saveEvent } from "./actions";
+import { bookEvent, changeEventStatus, commentEvent, deleteEventById, fetchEvents, fetchTopEvents, getEventById, likeEvent, saveEvent } from "./actions";
 
 interface EventState {
   events: {
@@ -51,6 +51,18 @@ const eventSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchEvents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchTopEvents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTopEvents.fulfilled, (state, action) => {
+        state.topEvents = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchTopEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

@@ -10,7 +10,7 @@ interface Props {
 const EventList = ({ eventsList }: Props) => {
     return (
         <View className='py-4 flex flex-row flex-wrap gap-3 justify-center'>
-            {eventsList && eventsList.map((event) => (
+            {eventsList.length && eventsList.map((event) => (
                 <EventItem key={event._id} event={event} />
             ))}
         </View>

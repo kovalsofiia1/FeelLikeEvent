@@ -17,6 +17,18 @@ export const fetchEvents = createAsyncThunk(
   }
 );
 
+export const fetchTopEvents = createAsyncThunk(
+  "events/fetchTopEvents",
+  async (params: {}, { rejectWithValue }) => {
+    try {
+      const response = await axiosInst.get(`/events/top`, { params });
+      return response.data.topEvents;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch events");
+    }
+  }
+);
+
 // Get Event by ID
 export const getEventById = createAsyncThunk(
   "events/getEventById",
