@@ -32,7 +32,7 @@ const FormField = ({
 	return (
 		<View className={`${otherStyles}`}>
 			{title && <Text className="text-base text-gray-500 pb-2">{title}</Text>}
-			<View className="flex flex-row items-center">
+			<View className="relative flex flex-row items-center">
 				<TextInput
 					className="w-full h-15 px-4 py-2 bg-black-100 rounded-3xl border border-gray-400 focus:border-secondary flex-1 text-gray-500 text-base"
 					value={value}
@@ -48,6 +48,14 @@ const FormField = ({
 					<TouchableOpacity
 						onPress={() => setShowPassword(!showPassword)}
 						accessibilityLabel="Toggle password visibility"
+						style={
+							{
+								position: "absolute",
+								top: '50%',
+								right: 0,
+								transform: 'translate(-50%, -50%)'
+							}
+						}
 					>
 						<Image
 							source={showPassword ? icons.eye : icons.eyeHide}
@@ -66,6 +74,7 @@ const FormField = ({
 };
 
 export default FormField;
+
 
 
 

@@ -4,19 +4,10 @@ import { Stack, useRouter, SplashScreen } from 'expo-router';
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import "react-native-url-polyfill/auto";
-// import dotenv from 'dotenv';
-// import GlobalProvider from "@/src/context/GlobalProvider";
-// import Logo from '@/src/components/shared/Logo';
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { View } from 'react-native';
-// import { GlobalStyles } from '@/src/components/shared/GlobalStyles';
 import SafeAreaWrapper from '@/src/components/shared/SafeAreaWrapper';
 import Header from '@/src/components/shared/Header';
-// import { AuthProvider } from '@/src/context/AuthContext';
 import { Provider } from 'react-redux';
-import store, { AppDispatch } from '../redux/store';
-import { loadTokenFromStorage } from '../redux/user/actions';
-import { useDispatch } from 'react-redux';
+import store from '../redux/store';
 import AllContentWrapper from '../components/shared/AllContentWrapper';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -61,6 +52,7 @@ const RootLayout = () => {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="admin" options={{ headerShown: false }} />
             <Stack.Screen name="[...rest]" options={{ headerShown: false }} />
           </Stack>
         </SafeAreaWrapper>
