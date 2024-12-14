@@ -61,13 +61,6 @@ const Profile = () => {
                 formData.append("avatars", blob, "avatar.jpg");
             }
 
-            // const imagePromises = updatedProfile.avatarURL.map(async (uri, index) => {
-            //     const blob = await fetch(uri).then((res) => res.blob());
-            //     formData.append('avatars', blob, `image_${index}.jpg`);
-            // });
-
-            // await Promise.all(imagePromises);
-            // Log FormData contents (for debugging)
             for (const [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
             }
@@ -109,15 +102,8 @@ const Profile = () => {
                         )}
                     </>
                     }
+
                 </View>
-                {/* <View>
-                <Text>Profile</Text>
-                <CustomButton onPress={() => logout()}>Logout</CustomButton>
-                <Text>{user?.status}</Text>
-                {loading && <Text>Loading...</Text>}
-                {error && <Text>Error: {error}</Text>}
-                {user && <Text>User: {user.name}</Text>}
-            </View> */}
             </Container>
         </AuthGuard>
     )
