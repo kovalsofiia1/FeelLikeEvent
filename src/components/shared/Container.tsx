@@ -36,7 +36,7 @@ interface Props {
 const Container: React.FC<Props> = ({ children }) => {
     return (
         <LinearGradient
-            colors={['rgba(245,245,245,1)', 'rgba(52,112,255,0.6)', 'rgba(157, 96, 232, 0.6)']}
+            colors={['rgba(245,245,245,0.5)', 'rgba(52,112,255,0.4)', 'rgba(157, 96, 232, 0.4)']}
             start={{ x: 0.4, y: 0.4 }}
             end={{ x: 1, y: 1 }}
             style={styles.container}

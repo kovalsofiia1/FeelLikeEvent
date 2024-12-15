@@ -17,6 +17,7 @@ import { selectCurrentEvent } from '@/src/redux/events/selectors';
 import { bookEvent, deleteEventById, getEventById, saveEvent } from '@/src/redux/events/actions';
 import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 import { DEFAULT_EVENT_IMAGE } from '@/src/constants/defaultImagePath';
+import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
 
 type RouteParams = {
     eventId: string;
@@ -101,9 +102,9 @@ const EventDetailsPage = () => {
                             resizeMode="cover"
                         />
                     </View>
-                    <View className='flex flex-row justify-between flex-wrap mb-5'>
-                        <View>
-                            <Text className="text-2xl font-bold text-gray-900 mb-2">
+                    <View className='flex flex-row justify-between flex-wrap mb-5 w-full'>
+                        <View className='w-full'>
+                            <Text className="text-2xl font-bold text-gray-900 mb-2 w-full overflow-clip">
                                 {currentEvent.name}
                             </Text>
                             <View className="flex-row justify-between items-center mb-4">
@@ -126,45 +127,51 @@ const EventDetailsPage = () => {
                     </Text>
 
                     <View className="mb-6">
-                        <Text className="text-gray-900 font-bold mb-2">Деталі:</Text>
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)} - ${getDate(currentEvent.endDate)}`}
-                        </Text>
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
-                        </Text>
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
-                        </Text>
-                        {currentEvent.location ? (
-                            typeof currentEvent.location === 'string' ? (
-                                <Text className="text-gray-700">
-                                    <Text className="font-bold">Адреса:</Text> {currentEvent.location}
-                                </Text>
-                            ) : (
-                                <>
-                                    <Text className="text-gray-700">
-                                        <Text className="font-bold">Країна:</Text> {currentEvent.location.country}
-                                    </Text>
-                                    <Text className="text-gray-700">
-                                        <Text className="font-bold">Місто:</Text> {currentEvent.location.city}
-                                    </Text>
-                                    <Text className="text-gray-700">
-                                        <Text className="font-bold">Адреса:</Text> {currentEvent.location.address}
-                                    </Text>
-                                    <Text className="text-gray-700">
-                                        <Text className="font-bold">Місце:</Text> {currentEvent.location.place}
-                                    </Text>
-                                </>
-                            )
-                        ) : (
-                            <Text className="text-gray-700">
-                                <Text className="font-bold">Місце:</Text> {currentEvent.isOnline}
+                        <View>
+                            <Text className="text-lg text-gray-900 font-bold mb-2">Деталі</Text>
+                            <HorizontalLine></HorizontalLine>
+                        </View>
+
+                        <View className='flex flex-row gap-8 flex-wrap'>
+                            <Text className="text-gray-700 flex flex-col gap-1">
+                                <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)} - ${getDate(currentEvent.endDate)}`}
                             </Text>
-                        )}
-                        <Text className="text-gray-700">
-                            <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
-                        </Text>
+                            <Text className="text-gray-700 flex flex-col gap-1">
+                                <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
+                            </Text>
+                            <Text className="text-gray-700 flex flex-col gap-1">
+                                <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
+                            </Text>
+                            {currentEvent.location ? (
+                                typeof currentEvent.location === 'string' ? (
+                                    <Text className="text-gray-700 flex flex-col gap-1">
+                                        <Text className="font-bold">Адреса:</Text> {currentEvent.location}
+                                    </Text>
+                                ) : (
+                                    <>
+                                        <Text className="text-gray-700 flex flex-col gap-1">
+                                            <Text className="font-bold">Країна:</Text> {currentEvent.location.country}
+                                        </Text>
+                                        <Text className="text-gray-700 flex flex-col gap-1">
+                                            <Text className="font-bold">Місто:</Text> {currentEvent.location.city}
+                                        </Text>
+                                        <Text className="text-gray-700 flex flex-col gap-1">
+                                            <Text className="font-bold">Адреса:</Text> {currentEvent.location.address}
+                                        </Text>
+                                        <Text className="text-gray-700 flex flex-col gap-1">
+                                            <Text className="font-bold">Місце:</Text> {currentEvent.location.place}
+                                        </Text>
+                                    </>
+                                )
+                            ) : (
+                                <Text className="text-gray- flex flex-col gap-1">
+                                    <Text className="font-bold">Місце:</Text> {currentEvent.isOnline}
+                                </Text>
+                            )}
+                            <Text className="text-gray-700 flex flex-col gap-1">
+                                <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
+                            </Text>
+                        </View>
                     </View>
 
 

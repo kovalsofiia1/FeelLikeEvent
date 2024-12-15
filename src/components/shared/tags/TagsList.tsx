@@ -10,7 +10,8 @@ const TagsList: React.FC<Props> = ({ tags }) => {
             {tags.map((tag) => (
                 <Text
                     key={tag}
-                    className="text-sm bg-blue-200 rounded-full px-2 py-1 text-gray-600 mr-2 mb-2 min-w-10 text-center"
+                    className="text-sm bg-white rounded-full px-2 py-1 text-gray-600 mr-2 mb-2 min-w-10 text-center"
+                    style={{ backgroundColor: "white" }}
                 >
                     {tag}
                 </Text>

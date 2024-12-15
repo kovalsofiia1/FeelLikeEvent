@@ -8,7 +8,7 @@ interface HorizontalLineProps {
 }
 
 const HorizontalLine: React.FC<HorizontalLineProps> = ({
-  color = '#ddd', // Default color (light gray)
+  color = '#fff', // Default color (light gray)
   thickness = 1,   // Default thickness (1px)
   marginVertical = 10, // Default margin
 }) => {

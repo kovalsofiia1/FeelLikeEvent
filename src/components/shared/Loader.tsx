@@ -21,9 +21,11 @@ export default Loader;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+    marginTop: '50%',
+    backgroundColor: 'rgba(0,0,0,0)', // Semi-transparent background
   },
   message: {
     marginTop: 10,

@@ -67,7 +67,7 @@ const BookingPage = () => {
   return (
     <Container>
       <View className="max-w-[800px]">
-        <Text className="font-medium text-3xl mb-5">Забронювати подію <Text className="text-blue-500">"{currentEvent?.name}"</Text></Text>
+        <Text className="font-medium text-3xl mb-5 flex flex-col">Забронювати подію <Text className="text-blue-500">"{currentEvent?.name}"</Text></Text>
         <Text className="text-lg text-slate-600 mb-4">Ти на крок ближче до чудово проведеного часу разом з нами! Заповни, будь ласка, наступні дані, щоб ми змогли з тобою зв’язатися!</Text>
 
         <Formik
@@ -81,7 +81,7 @@ const BookingPage = () => {
           onSubmit={handleBook}
         >
           {({ values, handleChange, handleSubmit, errors, touched, isValid, dirty }) => (
-            <View>
+            <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 16 }}>
               <FormField
                 title="Ім'я"
                 placeholder="Ім'я"
