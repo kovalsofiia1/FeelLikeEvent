@@ -26,7 +26,6 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
 
   const handleLocationSelect = (location: string) => {
     setSelectedLocation(location);
-    console.log('Selected location:', location);
   };
 
 

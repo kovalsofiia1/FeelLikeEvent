@@ -61,10 +61,6 @@ const Profile = () => {
                 formData.append("avatars", blob, "avatar.jpg");
             }
 
-            for (const [key, value] of formData.entries()) {
-                console.log(`${key}:`, value);
-            }
-
             // Dispatch the updateMyData action with the FormData
             dispatch(updateMyData(formData))
                 .then(() => {
@@ -82,7 +78,6 @@ const Profile = () => {
         setIsEditing(false);
     };
 
-    console.log(user)
     return (
         <AuthGuard>
             <Container>

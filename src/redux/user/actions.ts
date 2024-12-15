@@ -23,19 +23,15 @@ export const loadTokenFromStorage = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = await getItem(TOKEN_KEY);
-      console.log(token);
       if (!token) {
         throw new Error("No token found");
       }
 
       setAuthHeader(token);
 
-      // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
       // Fetch user data with the token
       const userDataResponse = await axiosInst.get(`/user/me`);
 
-      // console.log(userDataResponse);
       return {
         token,
         user: userDataResponse.data, // Assuming user data is returned in the response
@@ -123,7 +119,6 @@ export const updateMyData = createAsyncThunk(
   'user/updateMyData',
   async (formData: FormData, thunkAPI) => {
     try {
-      console.log("Submitting profile update with FormData:", formData);
       const response = await axiosInst.put(`/user/me`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

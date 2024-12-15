@@ -23,8 +23,6 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
       try {
         const events = await axiosInst.get('/events/me');
 
-        console.log(events);
-
         setBookedEvents(events.data.bookedEvents);
         setVisitedEvents(events.data.visitedEvents);
         setCreatedEvents(events.data.createdEvents);
@@ -50,7 +48,7 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
         <View className="flex flex-row gap-8 items-start flex-wrap">
           <Image source={{ uri: userProfile?.avatarURL || DEFAULT_AVATAR_IMAGE }} className="w-[200px] h-[200px] rounded-xl" />
           <View >
-            <Text className="flex flex-col mb-2">
+            <Text className="flex flex-col gap-2 mb-2">
               <Text className="text-base text-gray-500 pb-2">Ім'я</Text>
               <Text className="text-lg font-bold">{userProfile.name}</Text>
             </Text>

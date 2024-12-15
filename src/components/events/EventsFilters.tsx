@@ -51,12 +51,6 @@ const EventsFilters = ({ onFiltersChange }: { onFiltersChange: (filters: any) =>
     }, []);
 
     useEffect(() => {
-        console.log({
-            locationFilter: selectedCities.join(','),
-            timeFilter: selectedTime.join(','),
-            eventType: selectedEventTypes.join(','),
-            targetAudience: selectedTargetAudience.join(','),
-        })
         // Call the parent callback whenever filters change
         onFiltersChange({
             locationFilter: selectedCities.join(','),

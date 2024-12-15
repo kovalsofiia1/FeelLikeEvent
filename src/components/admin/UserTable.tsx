@@ -45,7 +45,6 @@ const UserTable = () => {
   };
 
   const handleChangeStatus = (id: string, status: User["status"]) => {
-    console.log(id, status)
     dispatch(changeUserStatus({ userId: id, status }))
       .catch(() => alert("Сталася помилка при зміні статусу!"));
   };

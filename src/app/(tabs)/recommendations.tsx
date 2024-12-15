@@ -13,9 +13,6 @@ const Recommendations = () => {
     const [showForm, setShowForm] = useState(true);
     // Function to handle the form submission and set the results
     const handleSearchSubmit = async (data: any) => {
-        console.log('Search Data:', data);
-        // Simulate fetching search results based on form data
-
         setSearchResults([]);
         setShowForm(false);
         try {

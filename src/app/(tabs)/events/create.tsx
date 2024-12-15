@@ -81,7 +81,6 @@ const CreateEventPage = () => {
 			const eventId = response.data.event._id as string;
 			router.push(`/events/${eventId}`)
 		} catch (err) {
-			console.log(err)
 			alert('Сталася помилка при створенні події!')
 		}
 	};

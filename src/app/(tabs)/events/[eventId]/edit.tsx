@@ -93,11 +93,6 @@ const EditEventPage = () => {
 
       await Promise.all(imagePromises);
 
-      // Log FormData contents
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       try {
         const response = await axiosInst.put(`/events/${eventId}`, formData, {
           headers: {
@@ -107,9 +102,7 @@ const EditEventPage = () => {
 
         router.push(`/events/${eventId}`)
       } catch (err) {
-        console.log(err)
         alert('Сталася помилка при створенні події!')
-        // router.push(`/events`)
       }
     } catch (error) {
       console.error('Error while submitting:', error);
