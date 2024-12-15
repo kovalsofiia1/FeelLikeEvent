@@ -15,6 +15,7 @@ import { AudienceOptions } from '@/src/constants/eventForm/audience';
 import { EventTypeOptions } from '@/src/constants/eventForm/eventTypes';
 import TagsInput from './TagsInput';
 import { FormValues } from '@/src/types/eventForm';
+import { isWeb } from '@/src/utils/storage';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Це поле є обов’язковим'),
@@ -99,20 +100,25 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
         return;
       }
 
-      // Launch the image picker with the updated mediaTypes format
-      // const result = await ImagePicker.launchImageLibraryAsync({
-      //   mediaTypes: ImagePicker.MediaTypeOptions.Images, // Use MediaType as an array
-      //   allowsEditing: true,                       // Optional: enable editing
-      //   aspect: [4, 3],                            // Aspect ratio for cropping
-      //   quality: 1,                                // Image quality
-      // });
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaType.Image,// Correct usage for images
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+      let result;
 
+
+      if (isWeb) {
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images, // Use MediaType as an array
+          allowsEditing: true,                       // Optional: enable editing
+          aspect: [4, 3],                            // Aspect ratio for cropping
+          quality: 1,                                // Image quality
+        });
+      }
+      else {
+        result = await ImagePicker.launchImageLibraryAsync({
+          // mediaTypes: ImagePicker.MediaType.Image,// Correct usage for images
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+      }
       // Handle the result
       if (!result.canceled && result.assets?.length > 0) {
         const selectedUri = result.assets[0].uri;
