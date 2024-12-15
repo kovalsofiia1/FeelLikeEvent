@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, Switch, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import CustomButton from '@/src/components/shared/CustomButton';
 import FormField from '@/src/components/shared/FormField';
 import DatePicker from 'react-datepicker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { uk } from 'date-fns/locale';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
@@ -17,7 +16,6 @@ import TagsInput from './TagsInput';
 import { FormValues } from '@/src/types/eventForm';
 import { isWeb } from '@/src/utils/storage';
 import MobileDatePicker from '../shared/elements/MobileDatePicker';
-import MobileDateTimePickerComponent from '../shared/elements/MobileDatePicker';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Це поле є обов’язковим'),
@@ -151,54 +149,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
 
           <HorizontalLine></HorizontalLine>
 
-          {/* <View style={styles.section} className='relative z-20'>
-            <Text className="text-base text-gray-500 pb-2">Час початку</Text>
-            {Platform.OS === 'web' ? (
-              <DatePicker
-                selected={values.startTime}
-                onChange={(date: Date | null) => setFieldValue('startTime', date)}
-                showTimeSelect
-                dateFormat="Pp"
-                locale={uk} 
-              />
-            ) : (
-              <TouchableOpacity
-                style={styles.datePickerButton}
-                onPress={() => { }}
-              >
-                <Text>{values.startTime ? values.startTime.toLocaleString('uk-UA') : 'Виберіть час початку'}</Text>
-              </TouchableOpacity>
-            )}
-            {touched.startTime && errors.startTime && (
-              <Text style={{ color: 'red' }}>
-                {String(errors.startTime)}
-              </Text>
-            )}
-            <Text className="text-base text-gray-500 pb-2">Час закінчення</Text>
-            {Platform.OS === 'web' ? (
-              <DatePicker
-                selected={values.endTime}
-                onChange={(date: Date | null) => setFieldValue('endTime', date)}
-                showTimeSelect
-                dateFormat="Pp"
-                locale={uk}
-              />
-            ) : (
-              <TouchableOpacity
-                style={styles.datePickerButton}
-                onPress={() => { }}
-              >
-                <Text>{values.endTime ? values.endTime.toLocaleString('uk-UA') : 'Виберіть час закінчення'}</Text>
-              </TouchableOpacity>
-
-            )}
-            {touched.endTime && errors.endTime && (
-              <Text style={{ color: 'red' }}>
-                {String(errors.endTime)}
-              </Text>
-            )}
-          </View> */}
-
           {/* Time Pickers */}
           {/* Start Time Picker */}
           <Text className="text-base text-gray-500 pb-2">Час початку</Text>
@@ -212,10 +162,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
               locale={uk}
             />
           ) : (
-            // <MobileDateTimePickerComponent
-            //   value={values}
-            //   onChange={(newDateTime) => handleChange("date")(newDateTime.date)}
-            // />
             <MobileDatePicker initialDate={values.startTime} setDate={(date) => setFieldValue('startTime', date)} />
           )}
 
@@ -237,12 +183,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
               locale={uk}
             />
           ) : (
-            // <MobileDatePicker
-            //   label="Час кінця"
-            //   value={values.endTime}
-            //   onChange={(date) => setFieldValue('endTime', date)}
-            //   errorMessage={touched.startTime && String(errors.endTime)}
-            // />
             <MobileDatePicker initialDate={values.endTime} setDate={(date) => setFieldValue('endTime', date)}></MobileDatePicker>
           )}
 
