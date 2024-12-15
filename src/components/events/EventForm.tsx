@@ -75,17 +75,52 @@ interface Props {
 
 const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
 
-  const handlePickImages = async (setFieldValue: any) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: false,
-    });
+  // const handlePickImages = async (setFieldValue: any) => {
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: false,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //     allowsMultipleSelection: false,
+  //   });
 
-    if (!result.canceled) {
-      setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
+  //   if (!result.canceled) {
+  //     setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
+  //   }
+  // };
+
+  const handlePickImages = async (setFieldValue: any) => {
+    try {
+      // Request permissions explicitly
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        alert('Permission to access media library is required!');
+        return;
+      }
+
+      // Launch the image picker with the updated mediaTypes format
+      // const result = await ImagePicker.launchImageLibraryAsync({
+      //   mediaTypes: ImagePicker.MediaTypeOptions.Images, // Use MediaType as an array
+      //   allowsEditing: true,                       // Optional: enable editing
+      //   aspect: [4, 3],                            // Aspect ratio for cropping
+      //   quality: 1,                                // Image quality
+      // });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaType.Image,// Correct usage for images
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      // Handle the result
+      if (!result.canceled && result.assets?.length > 0) {
+        const selectedUri = result.assets[0].uri;
+        setFieldValue('images', [selectedUri]);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      alert('An error occurred while picking the image. Please try again.');
     }
   };
 
