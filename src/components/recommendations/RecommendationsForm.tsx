@@ -16,8 +16,8 @@ import { axiosInst } from '@/src/api/axiosSetUp';
 const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: any) => void }) => {
   const [mood, setMood] = useState('');
   const [dateOption, setDateOption] = useState('');
-  const [specificDate, setSpecificDate] = useState<Date | null>(new Date);
-  const [location, setLocation] = useState('');
+  const [specificDate, setSpecificDate] = useState<Date | null>(null);
+  // const [location, setLocation] = useState('');
   const [online, setOnline] = useState(false);
   const [ageGroup, setAgeGroup] = useState('');
   const [priceOption, setPriceOption] = useState('');
@@ -58,15 +58,35 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
   };
 
   const handleSubmit = () => {
-    const formData = {
-      mood,
-      dateOption,
-      specificDate,
-      location,
-      online,
-      ageGroup,
-      priceOption,
-    };
+    const formData: any = {};
+
+    if (mood) {
+      formData.mood = mood;
+    }
+
+    if (dateOption) {
+      formData.dateOption = dateOption;
+    }
+
+    if (specificDate) {
+      formData.specificDate = specificDate;
+    }
+
+    if (selectedLocation) {
+      formData.selectedLocation = selectedLocation;
+    }
+
+    if (online !== undefined) {  // Check for undefined, assuming online can be false
+      formData.online = online;
+    }
+
+    if (ageGroup) {
+      formData.ageGroup = ageGroup;
+    }
+
+    if (priceOption) {
+      formData.priceOption = priceOption;
+    }
 
     // Pass form data to parent component
     onSearchSubmit(formData);
@@ -81,9 +101,10 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
         items={[
           { label: 'Щасливий', value: 'HAPPY' },
           { label: 'Нейтральний', value: 'NEUTRAL' },
-          { label: 'Сумний - Втомлений', value: 'SAD' },
+          { label: 'Сумний - Спокійний', value: 'SAD' },
         ]}
         placeholder={{ label: 'Оберіть ваш настрій', value: '' }}
+        // value={'HAPPY'}
         style={pickerSelectStyles}
       />
 
@@ -91,16 +112,16 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
       <RNPickerSelect
         onValueChange={(value) => { setDateOption(value); setSpecificDate(null) }}
         items={[
-          { label: 'Сьогодні', value: 'today' },
-          { label: 'Завтра', value: 'tomorrow' },
-          { label: 'Цього тижня', value: 'this_week' },
-          { label: 'Конкретний день', value: 'specific_date' },
+          { label: 'Сьогодні', value: 'TODAY' },
+          { label: 'Завтра', value: 'TOMORROW' },
+          { label: 'Цього тижня', value: 'THIS_WEEK' },
+          { label: 'Конкретний день', value: 'SPECIFIC_DATE' },
         ]}
-        value={specificDate ? 'specific_date' : ''}
+        // value={specificDate ? 'specific_date' : ''}
         placeholder={{ label: 'Оберіть дату', value: '' }}
         style={pickerSelectStyles}
       />
-      {(dateOption === 'specific_date' || specificDate) && (
+      {(dateOption === 'SPECIFIC_DATE' || specificDate) && (
         <View className='relative z-30 pt-2'>
           {Platform.OS === "web" ? (
             // Web Date Picker
@@ -168,7 +189,6 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
           { label: 'Безкоштовні події', value: 'FREE' },
           { label: 'Платні події', value: 'PAID' },
         ]}
-        value={''}
         placeholder={{ label: 'Оберіть ціновий діапазон', value: '' }}
         style={pickerSelectStyles}
       />
@@ -179,9 +199,13 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 0 },
+  container: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 16
+  },
   heading: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
-  label: { fontSize: 16, marginVertical: 10 },
+  label: { fontSize: 16, marginVertical: 10, fontWeight: 'bold' },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',

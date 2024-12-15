@@ -15,8 +15,8 @@ const TopEvents = () => {
     }, [])
     return (
         <View>
-            <Text className={`text-xl text-center mb-2 font-bold`}>Найпопулярніші події</Text>
-            <Link href="/events" className='text-md underline text-right text-gray-400'>Переглянути усі</Link>
+            <Text className={`text-xl text-center mb-2 font-bold text-white`}>Найпопулярніші події</Text>
+            <Link href="/events" className='text-md underline text-right text-white'>Переглянути усі</Link>
             <EventList eventsList={topEvents}></EventList>
         </View >
     )

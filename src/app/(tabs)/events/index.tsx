@@ -102,7 +102,7 @@ const EventsPage = () => {
                 <CustomButton onPress={() => { handleAdd(); }} additionalStyles="px-3">+</CustomButton>
             </View>
 
-            <Text className="font-bold text-xl text-center">{isFavorite ? 'Улюблені події' : 'Усі події'}</Text>
+            <Text className="font-bold text-xl text-center text-white">{isFavorite ? 'Улюблені події' : 'Усі події'}</Text>
 
             {/* Event List with Pagination */}
             {isLoading ? (

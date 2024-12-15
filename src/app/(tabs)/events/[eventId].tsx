@@ -175,7 +175,7 @@ const EventDetailsPage = () => {
                     <View className="flex-row gap-2">
                         {currentEvent.booking && <Text>Ви забронювали {currentEvent.booking.tickets} квитків </Text>}
                         {new Date(currentEvent.startDate) > new Date() && <CustomButton onPress={() => { handleBooking() }}>{currentEvent.booking ? 'Скасувати бронювання' : 'Забронювати'}</CustomButton>}
-                        <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити зі збережених' : 'Зберегти'}</CustomButton>
+                        <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити із улюблених' : 'Додати в улюблені'}</CustomButton>
                     </View>
 
                     <CommentsSection></CommentsSection>

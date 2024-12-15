@@ -42,13 +42,13 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
       <Text className='font-bold text-blue-500 text-xl mb-4'>Профіль користувача</Text>
 
       {/* Main info */}
-      <View>
+      <View className="bg-white">
         <View>
           <Text className="text-lg">Основна інформація</Text>
           <HorizontalLine></HorizontalLine>
         </View>
         <View className="flex flex-row gap-8 items-start flex-wrap">
-          <Image source={{ uri: userProfile?.avatarURL || DEFAULT_AVATAR_IMAGE }} className="border border-gray-300 w-[200px] h-[200px] rounded-xl" />
+          <Image source={{ uri: userProfile?.avatarURL || DEFAULT_AVATAR_IMAGE }} className="w-[200px] h-[200px] rounded-xl" />
           <View >
             <Text className="flex flex-col mb-2">
               <Text className="text-base text-gray-500 pb-2">Ім'я</Text>

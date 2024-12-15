@@ -11,7 +11,7 @@ interface Props {
 
 const EventItem = ({ event }: Props) => {
     return (
-        <View className="border border-gray-300 rounded-lg p-4 w-72 shadow-sm">
+        <View className="border border-gray-300 rounded-lg p-4 w-72 shadow-md bg-white" style={{ backgroundColor: 'white' }}>
             {/* Image Placeholder */}
             <View className="bg-gray-200 h-32 w-full rounded-lg mb-4">
                 <Image

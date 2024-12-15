@@ -95,7 +95,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
           <View className="ml-auto mr-auto">
             <Image
               source={values.avatarURL ? { uri: values.avatarURL } : { uri: DEFAULT_EVENT_IMAGE }}
-              className="border border-gray-300 w-[200px] h-[200px] rounded-3xl mb-4"
+              className="w-[200px] h-[200px] rounded-3xl mb-4"
             />
             <CustomButton onPress={() => handlePickImages(setFieldValue)} isActive={true}>
               Вибрати зображення

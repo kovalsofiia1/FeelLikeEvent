@@ -68,7 +68,7 @@ const EventsFilters = ({ onFiltersChange }: { onFiltersChange: (filters: any) =>
     }, [selectedCities, selectedTime, selectedEventTypes, selectedTargetAudience]);
 
     return (
-        <View className="flex-1 justify-center py-4 bg-gray-100">
+        <View className="flex-1 justify-center py-4">
             <Text className="font-bold text-xl mb-4">Фільтри</Text>
             <View className="flex flex-row gap-1 flex-wrap">
                 <MultipleSelect
