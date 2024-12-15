@@ -46,7 +46,7 @@ const Header = () => {
     }
 
     return (
-        <View className='flex flex-row justify-between items-center px-4 py-2 flex-wrap gap-1'>
+        <View className='flex flex-row justify-between items-start px-4 py-2 flex-wrap gap-1'>
             <View className='flex flex-row gap-2 items-center'>
                 {!isAuthPage &&
                     <TouchableOpacity onPress={() => { handlePress() }}>
@@ -62,8 +62,8 @@ const Header = () => {
 
             {
                 user && user.status === "ADMIN" && !isAdminPage &&
-                <View className="flex flex-row gap-2 items-center">
-                    <Text className='text-lg'>Привіт, адмін {user.name}</Text>
+                <View className="flex gap-2 items-center flex-wrap">
+                    <Text className='text-lg text-center'>Привіт, адмін {user.name}</Text>
                     <CustomButton onPress={() => router.push('/admin')}>Перейти до панелі адміністратора</CustomButton>
                 </View>
             }

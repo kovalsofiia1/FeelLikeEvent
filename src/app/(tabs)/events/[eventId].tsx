@@ -94,14 +94,14 @@ const EventDetailsPage = () => {
         <Container>
             {isLoading ? <Loader /> :
                 (currentEvent ? <>
-                    <View className="bg-gray-200 h-40 w-full rounded-lg mb-4">
+                    <View className="bg-gray-200 h-[40%] w-full rounded-lg mb-4">
                         <Image
                             source={{ uri: (currentEvent.images && currentEvent.images.length > 0 ? currentEvent.images[0] : DEFAULT_EVENT_IMAGE) }}
                             className="h-full w-full rounded-lg"
                             resizeMode="cover"
                         />
                     </View>
-                    <View className='flex flex-row justify-between'>
+                    <View className='flex flex-row justify-between flex-wrap mb-5'>
                         <View>
                             <Text className="text-2xl font-bold text-gray-900 mb-2">
                                 {currentEvent.name}
@@ -111,7 +111,7 @@ const EventDetailsPage = () => {
                             </View>
                         </View>
                         {user?._id === currentEvent.createdBy._id &&
-                            <View className='flex flex-row gap-2'>
+                            <View className='flex flex-row gap-2 items-end'>
                                 <CustomButton onPress={() => router.push(`/events/${eventId}/edit`)} isActive={false}>Редагувати</CustomButton>
                                 <CustomButton onPress={() => handleDelete()}>Видалити</CustomButton>
                             </View>
