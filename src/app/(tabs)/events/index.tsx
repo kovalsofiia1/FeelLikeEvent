@@ -79,7 +79,7 @@ const EventsPage = () => {
 
     return (
         <Container>
-            <View className="flex justify-between align-center py-4">
+            <View className="flex justify-between align-center py-4 max-w-[800px]">
                 <Text className="text-3xl text-blue-500 font-bold mb-4">Усі події</Text>
                 <FormField
                     placeholder="Шукайте події"

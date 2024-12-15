@@ -42,7 +42,7 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
       <Text className='font-bold text-blue-500 text-xl mb-4'>Профіль користувача</Text>
 
       {/* Main info */}
-      <View className="bg-white">
+      <View>
         <View>
           <Text className="text-lg">Основна інформація</Text>
           <HorizontalLine></HorizontalLine>

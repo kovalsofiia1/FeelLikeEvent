@@ -97,7 +97,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
       onSubmit={handleSubmit}
     >
       {({ values, handleChange, handleSubmit, setFieldValue, errors, touched }) => (
-        <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 16, marginBottom: 16 }} >
+        <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 16, marginBottom: 16, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }} >
           <Text style={styles.heading} className='font-bold text-blue-500'>{title}</Text>
 
           {/* Basic Info */}
