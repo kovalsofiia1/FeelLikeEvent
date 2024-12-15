@@ -1,90 +1,3 @@
-// import React, { useState } from 'react';
-// import { View, TextInput, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-// interface AutocompleteProps {
-//   data: string[];
-//   onSelect: (item: string) => void;
-//   placeholder?: string;
-// }
-
-// const Autocomplete: React.FC<AutocompleteProps> = ({ data, onSelect, placeholder }) => {
-//   const [query, setQuery] = useState('');
-//   const [filteredData, setFilteredData] = useState<string[]>(data);
-
-//   const handleInputChange = (text: string) => {
-//     setQuery(text);
-//     if (text.length > 0) {
-//       const filtered = data.filter((item) =>
-//         item.toLowerCase().includes(text.toLowerCase())
-//       );
-//       setFilteredData(filtered);
-//     } else {
-//       setFilteredData(data);
-//     }
-//   };
-
-//   const onFocus = () => {
-//     setFilteredData(data)
-//   }
-
-//   const handleSelect = (item: string) => {
-//     setQuery(item);
-//     setFilteredData([]); // Hide suggestions after selection
-//     onSelect(item);
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <TextInput
-//         style={styles.input}
-//         placeholder={placeholder || 'Type something...'}
-//         value={query}
-//         onChangeText={handleInputChange}
-//         onFocus={onFocus}
-//       />
-//       {filteredData.length > 0 && (
-//         <FlatList
-//           data={filteredData}
-//           keyExtractor={(item, index) => index.toString()}
-//           renderItem={({ item }) => (
-//             <TouchableOpacity onPress={() => handleSelect(item)}>
-//               <Text style={styles.item}>{item}</Text>
-//             </TouchableOpacity>
-//           )}
-//           style={styles.list}
-//         />
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     position: 'relative',
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 5,
-//     padding: 10,
-//     marginBottom: 5,
-//   },
-//   list: {
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 5,
-//     maxHeight: 150,
-//     backgroundColor: '#fff',
-//   },
-//   item: {
-//     padding: 10,
-//     borderBottomWidth: 1,
-//     borderColor: '#eee',
-//   },
-// });
-
-// export default Autocomplete;
-
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Importing Ionicons
@@ -193,7 +106,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     right: 0,
-    transform: 'translate(-50%, -50%)'
+    transform: [{ translateX: -50 }, { translateY: -50 }]
   },
   list: {
     borderWidth: 1,

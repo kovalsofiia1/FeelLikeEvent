@@ -95,9 +95,10 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
       initialValues={initialValues as FormValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      style={{ backgroundColor: 'white', borderRadius: 16, padding: 16, marginBottom: 100, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }}
     >
       {({ values, handleChange, handleSubmit, setFieldValue, errors, touched }) => (
-        <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 16, marginBottom: 16, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }} >
+        <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 16, paddingBottom: 100, marginBottom: 16, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }} >
           <Text style={styles.heading} className='font-bold text-blue-500'>{title}</Text>
 
           {/* Basic Info */}
@@ -172,7 +173,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
 															setShowStartTimePicker(false);
 														}}
 													/>
-												)} */}
+												)}  */}
               </TouchableOpacity>
 
             )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, KeyboardTypeOptions, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardTypeOptions } from "react-native";
 import { icons } from "@/src/constants";
 
 interface Props {
@@ -48,14 +48,12 @@ const FormField = ({
 					<TouchableOpacity
 						onPress={() => setShowPassword(!showPassword)}
 						accessibilityLabel="Toggle password visibility"
-						style={
-							{
-								position: "absolute",
-								top: '50%',
-								right: 0,
-								transform: 'translate(-50%, -50%)'
-							}
-						}
+						style={{
+							position: "absolute",
+							top: "50%",
+							right: 10,
+							transform: [{ translateY: -12 }], // Adjust for centering
+						}}
 					>
 						<Image
 							source={showPassword ? icons.eye : icons.eyeHide}
@@ -68,13 +66,9 @@ const FormField = ({
 					</TouchableOpacity>
 				)}
 			</View>
-			{errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+			{errorMessage && <Text style={{ color: "red" }}>{errorMessage}</Text>}
 		</View>
 	);
 };
 
 export default FormField;
-
-
-
-
