@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import Container from '@/src/components/shared/Container';
 import TagsList from '@/src/components/shared/tags/TagsList';
@@ -18,6 +18,7 @@ import { bookEvent, deleteEventById, getEventById, saveEvent } from '@/src/redux
 import { handleNotLoggedIn } from '@/src/utils/notLoggedIn';
 import { DEFAULT_EVENT_IMAGE } from '@/src/constants/defaultImagePath';
 import HorizontalLine from '@/src/components/shared/elements/HorizontalLine';
+import { isWeb } from '@/src/utils/storage';
 
 type RouteParams = {
     eventId: string;
@@ -93,106 +94,108 @@ const EventDetailsPage = () => {
 
     return (
         <Container>
-            {isLoading ? <Loader /> :
-                (currentEvent ? <>
-                    <View className="bg-gray-200 h-[40%] w-full rounded-lg mb-4">
-                        <Image
-                            source={{ uri: (currentEvent.images && currentEvent.images.length > 0 ? currentEvent.images[0] : DEFAULT_EVENT_IMAGE) }}
-                            className="h-full w-full rounded-lg"
-                            resizeMode="cover"
-                        />
-                    </View>
-                    <View className='flex flex-row justify-between flex-wrap mb-5 w-full'>
-                        <View className='w-full'>
-                            <Text className="text-2xl font-bold text-gray-900 mb-2 w-full overflow-clip">
-                                {currentEvent.name}
-                            </Text>
-                            <View className="flex-row justify-between items-center mb-4">
-                                <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
-                            </View>
+            <View className='min-h-fit pb-20 mb-20'>
+                {isLoading ? <Loader /> :
+                    (currentEvent ? <View>
+                        <View className={`bg-gray-200 w-full rounded-lg mb-4 ${isWeb ? 'h-[30%]' : 'h-[15%]'}`}>
+                            <Image
+                                source={{ uri: (currentEvent.images && currentEvent.images.length > 0 ? currentEvent.images[0] : DEFAULT_EVENT_IMAGE) }}
+                                className="h-full max-h-[300px] w-full rounded-lg"
+                                resizeMode="cover"
+                            />
                         </View>
-                        {user?._id === currentEvent.createdBy._id &&
-                            <View className='flex flex-row gap-2 items-end'>
-                                <CustomButton onPress={() => router.push(`/events/${eventId}/edit`)} isActive={false}>Редагувати</CustomButton>
-                                <CustomButton onPress={() => handleDelete()}>Видалити</CustomButton>
-                            </View>
-                        }
-                    </View>
-
-                    <TagsList tags={currentEvent.tags || []}></TagsList>
-
-
-                    <Text className="text-gray-700 mb-6">
-                        {currentEvent.description}
-                    </Text>
-
-                    <View className="mb-6">
-                        <View>
-                            <Text className="text-lg text-gray-900 font-bold mb-2">Деталі</Text>
-                            <HorizontalLine></HorizontalLine>
-                        </View>
-
-                        <View className='flex flex-row gap-8 flex-wrap'>
-                            <Text className="text-gray-700 flex flex-col gap-1">
-                                <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)} - ${getDate(currentEvent.endDate)}`}
-                            </Text>
-                            <Text className="text-gray-700 flex flex-col gap-1">
-                                <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
-                            </Text>
-                            <Text className="text-gray-700 flex flex-col gap-1">
-                                <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
-                            </Text>
-                            {currentEvent.location ? (
-                                typeof currentEvent.location === 'string' ? (
-                                    <Text className="text-gray-700 flex flex-col gap-1">
-                                        <Text className="font-bold">Адреса:</Text> {currentEvent.location}
-                                    </Text>
-                                ) : (
-                                    <>
-                                        <Text className="text-gray-700 flex flex-col gap-1">
-                                            <Text className="font-bold">Країна:</Text> {currentEvent.location.country}
-                                        </Text>
-                                        <Text className="text-gray-700 flex flex-col gap-1">
-                                            <Text className="font-bold">Місто:</Text> {currentEvent.location.city}
-                                        </Text>
-                                        <Text className="text-gray-700 flex flex-col gap-1">
-                                            <Text className="font-bold">Адреса:</Text> {currentEvent.location.address}
-                                        </Text>
-                                        <Text className="text-gray-700 flex flex-col gap-1">
-                                            <Text className="font-bold">Місце:</Text> {currentEvent.location.place}
-                                        </Text>
-                                    </>
-                                )
-                            ) : (
-                                <Text className="text-gray- flex flex-col gap-1">
-                                    <Text className="font-bold">Місце:</Text> {currentEvent.isOnline}
+                        <View className='flex flex-row justify-between flex-wrap mb-5 w-full'>
+                            <View className='w-full'>
+                                <Text className="text-2xl font-bold text-gray-900 mb-2 w-full overflow-clip">
+                                    {currentEvent.name}
                                 </Text>
-                            )}
-                            <Text className="text-gray-700 flex flex-col gap-1">
-                                <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
-                            </Text>
+                                <View className="flex-row justify-between items-center mb-4">
+                                    <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
+                                </View>
+                            </View>
+                            {user?._id === currentEvent.createdBy._id &&
+                                <View className='flex flex-row gap-2 items-end'>
+                                    <CustomButton onPress={() => router.push(`/events/${eventId}/edit`)} isActive={false}>Редагувати</CustomButton>
+                                    <CustomButton onPress={() => handleDelete()}>Видалити</CustomButton>
+                                </View>
+                            }
                         </View>
+
+                        <TagsList tags={currentEvent.tags || []}></TagsList>
+
+
+                        <Text className="text-gray-700 mb-6">
+                            {currentEvent.description}
+                        </Text>
+
+                        <View className="mb-6">
+                            <View>
+                                <Text className="text-lg text-gray-900 font-bold mb-2">Деталі</Text>
+                                <HorizontalLine></HorizontalLine>
+                            </View>
+
+                            <View className='flex flex-row gap-8 flex-wrap'>
+                                <Text className="text-gray-700 flex flex-col gap-1">
+                                    <Text className="font-bold">Дата:</Text> {(getDate(currentEvent.startDate) === getDate(currentEvent.endDate)) ? `${getDate(currentEvent.startDate)}` : `${getDate(currentEvent.startDate)} - ${getDate(currentEvent.endDate)}`}
+                                </Text>
+                                <Text className="text-gray-700 flex flex-col gap-1">
+                                    <Text className="font-bold">Час:</Text> {getTime(currentEvent.startDate)} - {getTime(currentEvent.endDate)}
+                                </Text>
+                                <Text className="text-gray-700 flex flex-col gap-1">
+                                    <Text className="font-bold">Кількість людей:</Text> до {currentEvent.totalSeats}
+                                </Text>
+                                {currentEvent.location ? (
+                                    typeof currentEvent.location === 'string' ? (
+                                        <Text className="text-gray-700 flex flex-col gap-1">
+                                            <Text className="font-bold">Адреса:</Text> {currentEvent.location}
+                                        </Text>
+                                    ) : (
+                                        <>
+                                            <Text className="text-gray-700 flex flex-col gap-1">
+                                                <Text className="font-bold">Країна:</Text> {currentEvent.location.country}
+                                            </Text>
+                                            <Text className="text-gray-700 flex flex-col gap-1">
+                                                <Text className="font-bold">Місто:</Text> {currentEvent.location.city}
+                                            </Text>
+                                            <Text className="text-gray-700 flex flex-col gap-1">
+                                                <Text className="font-bold">Адреса:</Text> {currentEvent.location.address}
+                                            </Text>
+                                            <Text className="text-gray-700 flex flex-col gap-1">
+                                                <Text className="font-bold">Місце:</Text> {currentEvent.location.place}
+                                            </Text>
+                                        </>
+                                    )
+                                ) : (
+                                    <Text className="text-gray- flex flex-col gap-1">
+                                        <Text className="font-bold">Місце:</Text> {currentEvent.isOnline}
+                                    </Text>
+                                )}
+                                <Text className="text-gray-700 flex flex-col gap-1">
+                                    <Text className="font-bold">Організатор:</Text> {currentEvent.createdBy.name}
+                                </Text>
+                            </View>
+                        </View>
+
+
+                        <Text className="text-gray-700 mb-6">
+                            Вже заброньовано: {currentEvent.totalSeats - currentEvent.availableSeats}/{currentEvent.totalSeats} місць
+                        </Text>
+
+                        <View className="flex-row gap-2 flex-wrap">
+                            {currentEvent.booking && <Text>Ви забронювали {currentEvent.booking.tickets} квитків </Text>}
+                            {new Date(currentEvent.startDate) > new Date() && <CustomButton onPress={() => { handleBooking() }}>{currentEvent.booking ? 'Скасувати бронювання' : 'Забронювати'}</CustomButton>}
+                            <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити із улюблених' : 'Додати в улюблені'}</CustomButton>
+                        </View>
+
+                        <CommentsSection></CommentsSection>
                     </View>
-
-
-                    <Text className="text-gray-700 mb-6">
-                        Вже заброньовано: {currentEvent.totalSeats - currentEvent.availableSeats}/{currentEvent.totalSeats} місць
-                    </Text>
-
-                    <View className="flex-row gap-2">
-                        {currentEvent.booking && <Text>Ви забронювали {currentEvent.booking.tickets} квитків </Text>}
-                        {new Date(currentEvent.startDate) > new Date() && <CustomButton onPress={() => { handleBooking() }}>{currentEvent.booking ? 'Скасувати бронювання' : 'Забронювати'}</CustomButton>}
-                        <CustomButton onPress={() => { handleSaveEvent() }} isActive={false}>{currentEvent.isSaved ? 'Видалити із улюблених' : 'Додати в улюблені'}</CustomButton>
-                    </View>
-
-                    <CommentsSection></CommentsSection>
-                </>
-                    :
-                    <View>
-                        <Text>Вибачте! На жаль, дана подія зараз не доступна!</Text>
-                    </View>
-                )
-            }
+                        :
+                        <View>
+                            <Text>Вибачте! На жаль, дана подія зараз не доступна!</Text>
+                        </View>
+                    )
+                }
+            </View>
         </Container >
     );
 };

@@ -24,7 +24,6 @@
 //     }
 // })
 
-
 import React, { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,8 +40,9 @@ const Container: React.FC<Props> = ({ children }) => {
             end={{ x: 1, y: 1 }}
             style={styles.container}
         >
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.innerContainer}>
+
+            <ScrollView >
+                <View className="px-4 py-4">
                     {children}
                 </View>
             </ScrollView>
@@ -57,10 +57,6 @@ const styles = StyleSheet.create({
         flex: 1, // Ensures the gradient fills the entire screen
     },
     scrollViewContent: {
-        flexGrow: 1, // Allows ScrollView to resize dynamically
-    },
-    innerContainer: {
-        paddingHorizontal: 16,
-        paddingTop: 16,
+        flexGrow: 1, // Ensures the ScrollView content can grow and be scrollable
     },
 });

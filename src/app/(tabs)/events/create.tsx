@@ -65,11 +65,6 @@ const CreateEventPage = () => {
 
 		await Promise.all(imagePromises);
 
-		// Log FormData contents
-		for (const [key, value] of formData.entries()) {
-			console.log(`${key}:`, value);
-		}
-
 		// Submit data
 		try {
 			const response = await axiosInst.post('/events', formData, {

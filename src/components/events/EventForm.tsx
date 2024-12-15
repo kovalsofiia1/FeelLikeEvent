@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -16,6 +16,8 @@ import { EventTypeOptions } from '@/src/constants/eventForm/eventTypes';
 import TagsInput from './TagsInput';
 import { FormValues } from '@/src/types/eventForm';
 import { isWeb } from '@/src/utils/storage';
+import MobileDatePicker from '../shared/elements/MobileDatePicker';
+import MobileDateTimePickerComponent from '../shared/elements/MobileDatePicker';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Це поле є обов’язковим'),
@@ -76,20 +78,6 @@ interface Props {
 
 const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
 
-  // const handlePickImages = async (setFieldValue: any) => {
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: false,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //     allowsMultipleSelection: false,
-  //   });
-
-  //   if (!result.canceled) {
-  //     setFieldValue('images', result.assets.map((asset) => asset.uri)); // Set images to Formik
-  //   }
-  // };
-
   const handlePickImages = async (setFieldValue: any) => {
     try {
       // Request permissions explicitly
@@ -130,7 +118,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
     }
   };
 
-
   return (
     <Formik
       initialValues={initialValues as FormValues}
@@ -163,8 +150,8 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
           </View>
 
           <HorizontalLine></HorizontalLine>
-          {/* Date Picker */}
-          <View style={styles.section} className='relative z-20'>
+
+          {/* <View style={styles.section} className='relative z-20'>
             <Text className="text-base text-gray-500 pb-2">Час початку</Text>
             {Platform.OS === 'web' ? (
               <DatePicker
@@ -172,7 +159,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
                 onChange={(date: Date | null) => setFieldValue('startTime', date)}
                 showTimeSelect
                 dateFormat="Pp"
-                locale={uk} // Set Ukrainian locale
+                locale={uk} 
               />
             ) : (
               <TouchableOpacity
@@ -202,19 +189,6 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
                 onPress={() => { }}
               >
                 <Text>{values.endTime ? values.endTime.toLocaleString('uk-UA') : 'Виберіть час закінчення'}</Text>
-
-                {/* {showStartTimePicker && (
-													<DateTimePicker
-														value={values.startTime || new Date()}
-														mode="datetime"
-														is24Hour={true}
-														display="default"
-														onChange={(e, selectedDate) => {
-															setFieldValue('startTime', selectedDate || values.startTime);
-															setShowStartTimePicker(false);
-														}}
-													/>
-												)}  */}
               </TouchableOpacity>
 
             )}
@@ -223,7 +197,63 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
                 {String(errors.endTime)}
               </Text>
             )}
-          </View>
+          </View> */}
+
+          {/* Time Pickers */}
+          {/* Start Time Picker */}
+          <Text className="text-base text-gray-500 pb-2">Час початку</Text>
+          {Platform.OS === 'web' ? (
+            // Web DatePicker component
+            <DatePicker
+              selected={values.startTime}
+              onChange={(date) => setFieldValue('startTime', date)}
+              showTimeSelect
+              dateFormat="Pp"
+              locale={uk}
+            />
+          ) : (
+            // <MobileDateTimePickerComponent
+            //   value={values}
+            //   onChange={(newDateTime) => handleChange("date")(newDateTime.date)}
+            // />
+            <MobileDatePicker initialDate={values.startTime} setDate={(date) => setFieldValue('startTime', date)} />
+          )}
+
+          {touched.startTime && errors.startTime && (
+            <Text style={{ color: 'red' }}>
+              {String(errors.startTime)}
+            </Text>
+          )}
+
+          {/* End Time Picker */}
+          <Text className="text-base text-gray-500 pb-2">Час закінчення</Text>
+          {Platform.OS === 'web' ? (
+            // Web DatePicker component
+            <DatePicker
+              selected={values.endTime}
+              onChange={(date) => setFieldValue('endTime', date)}
+              showTimeSelect
+              dateFormat="Pp"
+              locale={uk}
+            />
+          ) : (
+            // <MobileDatePicker
+            //   label="Час кінця"
+            //   value={values.endTime}
+            //   onChange={(date) => setFieldValue('endTime', date)}
+            //   errorMessage={touched.startTime && String(errors.endTime)}
+            // />
+            <MobileDatePicker initialDate={values.endTime} setDate={(date) => setFieldValue('endTime', date)}></MobileDatePicker>
+          )}
+
+          {touched.endTime && errors.endTime && (
+            <Text style={{ color: 'red' }}>
+              {String(errors.endTime)}
+            </Text>
+          )}
+
+
+
           <HorizontalLine></HorizontalLine>
           {/* Event Type */}
           <View style={styles.section}>
@@ -353,7 +383,7 @@ const EventForm = ({ initialValues, handleSubmit, title }: Props) => {
             )}
           </View>
 
-          <CustomButton onPress={() => { console.log(values, errors); handleSubmit() }}>{title}</CustomButton>
+          <CustomButton onPress={() => { handleSubmit() }}>{title}</CustomButton>
         </View>
       )}
     </Formik>
@@ -404,6 +434,23 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 12,
+  },
+  container: {
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 16,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#555',
+  },
+  submitButton: {
+    backgroundColor: '#007BFF',
+    color: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    textAlign: 'center',
   },
 });
 
