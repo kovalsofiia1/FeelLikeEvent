@@ -112,8 +112,8 @@ const EventsPage = () => {
             ) : (
                 <>{
                     !events.events.length ?
-                        <View className='flex flex-1 justify-center items-center'>
-                            <Text className='text-bold text-3xl text-center text-blue-500'>На жаль, не знайдено подій за вашим запитом!</Text>
+                        <View className='flex flex-1 justify-center items-center mt-20'>
+                            <Text className='text-bold text-3xl text-center text-white'>На жаль, не знайдено подій за вашим запитом!</Text>
                         </View>
                         :
                         <>

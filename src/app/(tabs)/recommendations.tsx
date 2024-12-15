@@ -40,12 +40,14 @@ const Recommendations = () => {
                     <CustomButton onPress={() => handleSearch()} isActive={false} additionalStyles='self-end'>Шукати події</CustomButton>
                 }
                 {!showForm &&
-                    (searchResults.length ? <View>
-                        <Text className="font-bold text-xl text-center">{'Події за вашим запитом'}</Text>
-                        <EventList eventsList={searchResults}></EventList>
-                    </View>
-                        : <View className='flex flex-1 justify-center items-center'>
-                            <Text className='text-bold text-3xl text-center text-blue-500'>На жаль, не знайдено подій за вашим запитом!</Text>
+                    (searchResults.length ?
+                        <View>
+                            <Text className="font-bold text-xl text-center text-white">{'Події за вашим запитом'}</Text>
+                            <EventList eventsList={searchResults}></EventList>
+                        </View>
+                        :
+                        <View className='flex flex-1 min-h-[50%] justify-center items-center mt-20'>
+                            <Text className='text-bold text-3xl text-center text-white pt-10'>На жаль, не знайдено подій за вашим запитом!</Text>
                         </View>
                     )
                 }

@@ -89,7 +89,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
         errors,
         touched,
       }) => (
-        <View className="p-5 max-w-[600px] w-full ml-auto mr-auto flex gap-4">
+        <View className="p-5 max-w-[600px] w-full ml-auto mr-auto flex gap-4" style={styles.container}>
           <Text className="font-bold text-blue-500 text-xl mb-4">Редагування профілю</Text>
 
           <View className="ml-auto mr-auto">
@@ -111,6 +111,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 
           <FormField
             title={"Про мене"}
+            placeholder="Розкажіть щось про себе"
             value={values.description}
             handleChangeText={handleChange("description")}
             errorMessage={touched.description && errors.description}
@@ -166,6 +167,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
           <FormField
             title={"Номер телефону"}
             value={values.phoneNumber}
+            placeholder="+380"
             handleChangeText={handleChange("phoneNumber")}
             errorMessage={touched.phoneNumber && errors.phoneNumber}
           />
@@ -188,6 +190,11 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    marginBottom: 12
+  },
   label: {
     fontWeight: "bold",
     marginTop: 10,

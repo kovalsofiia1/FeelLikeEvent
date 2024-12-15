@@ -100,19 +100,19 @@ const ProfileInfoDisplay: React.FC<ProfileInfoDisplayProps> = ({ userProfile }) 
       {/* Events info */}
       <View>
         <View>
-          <Text className="text-lg">Заброньовані події</Text>
+          <Text className="text-lg pt-4">Заброньовані події</Text>
           <HorizontalLine></HorizontalLine>
         </View>
         <EventsSlider eventsList={bookedEvents}></EventsSlider>
 
         <View>
-          <Text className="text-lg">Створені події</Text>
+          <Text className="text-lg pt-4">Створені події</Text>
           <HorizontalLine></HorizontalLine>
         </View>
         <EventsSlider eventsList={createdEvents}></EventsSlider>
 
         <View>
-          <Text className="text-lg">Відвідані події</Text>
+          <Text className="text-lg  pt-4">Відвідані події</Text>
           <HorizontalLine></HorizontalLine>
         </View>
         <EventsSlider eventsList={visitedEvents}></EventsSlider>
