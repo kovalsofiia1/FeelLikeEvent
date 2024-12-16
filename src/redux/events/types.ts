@@ -27,6 +27,24 @@ export type EventType =
   | 'SPORTS'
   | 'CHARITY';
 
+
+export interface Booking {
+  additionalInformation: {
+    name?: string,
+    phoneNumber: string,
+    comment?: string
+  },
+  _id: string,
+  eventId: string,
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+    avatarURL?: string;
+  },
+  tickets: number
+}
+
 export interface Event {
   _id: string;
   name: string; // Name of the event
@@ -59,7 +77,8 @@ export interface Event {
     _id: string;
     name: string;
     avatarURL?: string;
-  }
+  },
+  bookings?: Booking[]
 }
 
 export interface User {
