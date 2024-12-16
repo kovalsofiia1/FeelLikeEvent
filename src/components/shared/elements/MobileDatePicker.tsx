@@ -6,9 +6,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 interface Props {
   initialDate: Date;
   setDate: (date: Date) => void;
+  mode?: "date" | "datetime"
 }
 
-const MobileDatePicker = ({ initialDate, setDate }: Props) => {
+const MobileDatePicker = ({ initialDate, setDate, mode = "datetime" }: Props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -34,7 +35,7 @@ const MobileDatePicker = ({ initialDate, setDate }: Props) => {
 
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="datetime"
+        mode={mode}
         date={initialDate}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}

@@ -14,7 +14,9 @@ import "react-datepicker/dist/react-datepicker.css"; // For web
 import { uk } from "date-fns/locale";
 import DateTimePickerModal from "react-native-modal-datetime-picker"; // For mobile
 import * as ImagePicker from 'expo-image-picker';
-import { DEFAULT_EVENT_IMAGE } from "@/src/constants/defaultImagePath";
+import { DEFAULT_AVATAR_IMAGE, DEFAULT_EVENT_IMAGE } from "@/src/constants/defaultImagePath";
+import { isWeb } from "@/src/utils/storage";
+import MobileDatePicker from "../shared/elements/MobileDatePicker";
 
 
 // Валідація з використанням Yup
@@ -50,21 +52,60 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
     setDatePickerVisibility(false);
   };
 
-
   const handlePickImages = async (setFieldValue: any) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [3, 3],
-      quality: 1,
-      allowsMultipleSelection: false,
-    });
+    try {
+      // Request permissions explicitly
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (!result.canceled && result.assets.length > 0) {
-      const imageUri = result.assets[0].uri;
-      setFieldValue('avatarURL', imageUri);
+      if (!permissionResult.granted) {
+        alert('Permission to access media library is required!');
+        return;
+      }
+
+      let result;
+
+
+      if (isWeb) {
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images, // Use MediaType as an array
+          allowsEditing: true,                       // Optional: enable editing
+          aspect: [3, 3],                            // Aspect ratio for cropping
+          quality: 1,                                // Image quality
+        });
+      }
+      else {
+        result = await ImagePicker.launchImageLibraryAsync({
+          // mediaTypes: ImagePicker.MediaType.Image,// Correct usage for images
+          allowsEditing: true,
+          aspect: [3, 3],
+          quality: 1,
+        });
+      }
+      // Handle the result
+      if (!result.canceled && result.assets?.length > 0) {
+        const selectedUri = result.assets[0].uri;
+        setFieldValue('avatarURL', selectedUri);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      alert('An error occurred while picking the image. Please try again.');
     }
   };
+
+  // const handlePickImages = async (setFieldValue: any) => {
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: false,
+  //     aspect: [3, 3],
+  //     quality: 1,
+  //     allowsMultipleSelection: false,
+  //   });
+
+  //   if (!result.canceled && result.assets.length > 0) {
+  //     const imageUri = result.assets[0].uri;
+  //     setFieldValue('avatarURL', imageUri);
+  //   }
+  // };
 
 
   return (
@@ -94,7 +135,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 
           <View className="ml-auto mr-auto">
             <Image
-              source={values.avatarURL ? { uri: values.avatarURL } : { uri: DEFAULT_EVENT_IMAGE }}
+              source={values.avatarURL ? { uri: values.avatarURL } : { uri: DEFAULT_AVATAR_IMAGE }}
               className="w-[200px] h-[200px] rounded-3xl mb-4"
             />
             <CustomButton onPress={() => handlePickImages(setFieldValue)} isActive={true}>
@@ -131,8 +172,10 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
               />
             ) : (
               // Mobile Date Picker
+
               <View>
-                <TouchableOpacity
+                <MobileDatePicker initialDate={new Date(values.dateOfBirth)} setDate={(date) => setFieldValue('dateOfBirth', date)} mode="date" />
+                {/* <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={() => setDatePickerVisibility(true)}
                 >
@@ -147,7 +190,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
                   date={new Date(values.dateOfBirth)}
                   onConfirm={(date) => handleConfirmDate(date, setFieldValue)}
                   onCancel={() => setDatePickerVisibility(false)}
-                />
+                /> */}
               </View>
             )}
             {touched.dateOfBirth && errors.dateOfBirth && (
