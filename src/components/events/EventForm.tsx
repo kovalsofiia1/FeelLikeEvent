@@ -19,7 +19,7 @@ import MobileDatePicker from '../shared/elements/MobileDatePicker';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Це поле є обов’язковим'),
-  description: Yup.string().required('Це поле є обов’язковим'),
+  description: Yup.string().min(3, 'Мінімальна довжина 3 символи').required('Це поле є обов’язковим'),
   eventType: Yup.string().required('Виберіть тип події'),
   targetAudience: Yup.string().required('Виберіть цільову аудиторію'),
   price: Yup.number().required('Введіть ціну').min(0, 'Ціна не може бути від’ємною'),

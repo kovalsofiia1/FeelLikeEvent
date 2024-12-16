@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '50%',
+    marginTop: '25%',
     backgroundColor: 'rgba(0,0,0,0)', // Semi-transparent background
   },
   message: {

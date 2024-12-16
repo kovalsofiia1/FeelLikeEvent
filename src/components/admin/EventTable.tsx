@@ -58,7 +58,7 @@ const EventTable = () => {
     <Container>
       <Text style={styles.header}>Події</Text>
       <View style={styles.table}>
-        <View style={styles.row} className="pr-[200px]">
+        <View style={styles.row} className="pr-[100px]">
           <Text style={styles.cell} className="font-bold">Назва</Text>
           <Text style={styles.cell} className="font-bold">Опис</Text>
           <Text style={styles.cell} className="font-bold">Дата початку</Text>
@@ -79,7 +79,7 @@ const EventTable = () => {
             <Text style={styles.cell}>{event.eventType}</Text>
             <Text style={styles.cell}>{event.eventStatus}</Text>
 
-            <View style={styles.statusButtons} className="w-[212px]">
+            <View style={styles.statusButtons} className="flex flex-col items-end justify-end flex-wrap gap-2">
               <CustomButton additionalStyles="px-1" onPress={() => router.push(`/events/${event._id}`)}>Деталі</CustomButton>
               {<CustomButton additionalStyles="px-1 bg-green-600" onPress={() => handleChangeStatus(event._id, "verify")}>Схвалити</CustomButton>}
               {<CustomButton additionalStyles="bg-red-600 px-1" onPress={() => handleChangeStatus(event._id, "decline")}>Відхилити</CustomButton>}
