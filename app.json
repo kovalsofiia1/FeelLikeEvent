@@ -14,7 +14,6 @@
     },
     "ios": {
       "supportsTablet": true,
-      "package": "com.event.for.you",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -24,7 +23,7 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.event.for.you"
+      "package": "com.event.foryou"
     },
     "web": {
       "bundler": "metro",
