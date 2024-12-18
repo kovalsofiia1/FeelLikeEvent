@@ -8,24 +8,31 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/src/redux/store";
 import { commentEvent } from "@/src/redux/events/actions";
 import { useLocalSearchParams } from "expo-router";
+import { selectIsLoggedIn } from "@/src/redux/user/selectors";
 
 const CommentsSection = () => {
     const comments = useSelector(selectCurrentEventComments);
     const [newComment, setNewComment] = useState("");
     const dispatch = useDispatch<AppDispatch>();
     const { eventId } = useLocalSearchParams();
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const handleAddComment = () => {
         if (newComment.trim()) {
             const newCommentObject = {
                 text: newComment.trim(),
             };
+            if (!isLoggedIn) {
+                alert('Увійдіть у систему, щоб залишити коментар!')
+                return;
+            }
             dispatch(commentEvent({ eventId: eventId as string, text: newComment.trim() }))
                 .unwrap()
                 .then(() => {
                     setNewComment('');
                 })
                 .catch((e) => {
+                    console.log(e)
                     alert("Щось пішло не так!");
                 })
         }

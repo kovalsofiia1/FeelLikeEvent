@@ -73,7 +73,7 @@ const BookingPage = () => {
         <Formik
           initialValues={{
             name: user?.name || '',
-            phone: '',
+            phone: user?.phoneNumber || '',
             tickets: 1, // Make sure tickets is a number, not a string
             comment: '',
           }}

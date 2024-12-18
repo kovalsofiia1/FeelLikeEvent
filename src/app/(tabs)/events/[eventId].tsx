@@ -5,9 +5,7 @@ import Container from '@/src/components/shared/Container';
 import TagsList from '@/src/components/shared/tags/TagsList';
 import CustomButton from '@/src/components/shared/CustomButton';
 import CommentsSection from '@/src/components/shared/CommentsSection';
-// import { bookEvent, saveEvent } from '@/src/services/eventsService';
 import Loader from '@/src/components/shared/Loader';
-import { Event } from '@/src/redux/events/types';
 import { getDate, getTime } from '@/src/utils/dateTime';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/src/redux/user/selectors';
@@ -47,10 +45,7 @@ const EventDetailsPage = () => {
                     setIsLoading(false);
                 });
         }
-
     }, [eventId]);
-
-
 
     const handleSaveEvent = async () => {
         if (!user) {
@@ -114,8 +109,9 @@ const EventDetailsPage = () => {
                                     <Text className="text-green-600 font-bold">{currentEvent.price ? `Ціна: ${currentEvent.price} грн.` : 'Безкоштовно'}</Text>
                                 </View>
                             </View>
-                            {user?._id === currentEvent.createdBy._id &&
+                            {currentEvent.bookings &&
                                 <View className='flex flex-row gap-2 items-end'>
+                                    <Text>Статус: {currentEvent.eventStatus}</Text>
                                     <CustomButton onPress={() => router.push(`/events/${eventId}/edit`)} isActive={false}>Редагувати</CustomButton>
                                     <CustomButton onPress={() => handleDelete()}>Видалити</CustomButton>
                                 </View>
@@ -123,7 +119,6 @@ const EventDetailsPage = () => {
                         </View>
 
                         <TagsList tags={currentEvent.tags || []}></TagsList>
-
 
                         <Text className="text-gray-700 mb-6">
                             {currentEvent.description}
