@@ -77,6 +77,14 @@ const EventsPage = () => {
         }
     };
 
+    const handleFavorite = () => {
+        if (!isLoggedIn) {
+            handleNotLoggedIn();
+        } else {
+            setIsFavorite((prevState) => !prevState);
+        }
+    }
+
     return (
         <Container>
             <View className="flex justify-between align-center py-4 max-w-[800px]">
@@ -92,7 +100,7 @@ const EventsPage = () => {
             <EventsFilters onFiltersChange={handleFiltersChange} />
 
             <View className="flex flex-row gap-2 justify-end items-center">
-                <TouchableOpacity onPress={() => { setIsFavorite((prevState) => !prevState); }}>
+                <TouchableOpacity onPress={() => { handleFavorite() }}>
                     <Image
                         source={isFavorite ? icons.redHeart : icons.heart}
                         resizeMode="contain"

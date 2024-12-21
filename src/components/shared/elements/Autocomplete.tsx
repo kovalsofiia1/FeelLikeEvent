@@ -68,16 +68,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ data, onSelect, placeholder
       </View>
 
       {isListVisible && filteredData.length > 0 && (
-        <FlatList
-          data={filteredData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleSelect(item)}>
+        <View style={styles.list}>
+          {filteredData.map((item, index) => (
+            <TouchableOpacity key={index} onPress={() => handleSelect(item)}>
               <Text style={styles.item}>{item}</Text>
             </TouchableOpacity>
-          )}
-          style={styles.list}
-        />
+          ))}
+        </View>
       )}
     </View>
   );

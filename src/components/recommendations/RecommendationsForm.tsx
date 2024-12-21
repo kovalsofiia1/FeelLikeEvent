@@ -75,7 +75,7 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
       formData.selectedLocation = selectedLocation;
     }
 
-    if (online !== undefined) {  // Check for undefined, assuming online can be false
+    if (online !== undefined) {
       formData.online = online;
     }
 
@@ -103,7 +103,6 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
           { label: 'Сумний - Спокійний', value: 'SAD' },
         ]}
         placeholder={{ label: 'Оберіть ваш настрій', value: '' }}
-        // value={'HAPPY'}
         style={pickerSelectStyles}
       />
 
@@ -116,7 +115,6 @@ const RecommendationsForm = ({ onSearchSubmit }: { onSearchSubmit: (formData: an
           { label: 'Цього тижня', value: 'THIS_WEEK' },
           { label: 'Конкретний день', value: 'SPECIFIC_DATE' },
         ]}
-        // value={specificDate ? 'specific_date' : ''}
         placeholder={{ label: 'Оберіть дату', value: '' }}
         style={pickerSelectStyles}
       />

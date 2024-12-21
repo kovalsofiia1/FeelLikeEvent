@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Formik } from 'formik';
 import CustomButton from '@/src/components/shared/CustomButton';
@@ -60,7 +60,7 @@ const SignUp = () => {
                     validationSchema={registerSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
+                    {({ handleChange, handleSubmit, values, errors, touched, isSubmitting }) => (
                         <View className="py-10 flex gap-2">
                             <FormField
                                 title="Ім'я"

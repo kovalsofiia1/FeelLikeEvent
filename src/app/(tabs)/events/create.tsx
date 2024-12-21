@@ -46,10 +46,10 @@ const CreateEventPage = () => {
 			formData.append(
 				'location',
 				JSON.stringify({
-					country: values.country,
-					city: values.city,
-					address: values.locationAddress,
-					place: values.place,
+					country: values.country.trim(),
+					city: values.city.trim(),
+					address: values.locationAddress.trim(),
+					place: values.place.trim(),
 				})
 			);
 		}

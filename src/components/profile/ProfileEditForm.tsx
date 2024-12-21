@@ -7,12 +7,9 @@ import TagsInput from "../events/TagsInput";
 import CustomButton from "../shared/CustomButton";
 import { User } from "@/src/redux/user/types";
 import { PHONE_PATTERN } from "@/src/constants/patterns";
-// import { uk } from "date-fns/locale";
-// import DatePicker from "react-datepicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // For web
 import { uk } from "date-fns/locale";
-import DateTimePickerModal from "react-native-modal-datetime-picker"; // For mobile
 import * as ImagePicker from 'expo-image-picker';
 import { DEFAULT_AVATAR_IMAGE, DEFAULT_EVENT_IMAGE } from "@/src/constants/defaultImagePath";
 import { isWeb } from "@/src/utils/storage";
@@ -41,15 +38,8 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
   onCancel,
 }) => {
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
   const handleDateChange = (date: Date | null, setFieldValue: any) => {
     setFieldValue("dateOfBirth", date);
-  };
-
-  const handleConfirmDate = (date: Date, setFieldValue: any) => {
-    setFieldValue("dateOfBirth", date);
-    setDatePickerVisibility(false);
   };
 
   const handlePickImages = async (setFieldValue: any) => {
@@ -91,22 +81,6 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
       alert('An error occurred while picking the image. Please try again.');
     }
   };
-
-  // const handlePickImages = async (setFieldValue: any) => {
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: false,
-  //     aspect: [3, 3],
-  //     quality: 1,
-  //     allowsMultipleSelection: false,
-  //   });
-
-  //   if (!result.canceled && result.assets.length > 0) {
-  //     const imageUri = result.assets[0].uri;
-  //     setFieldValue('avatarURL', imageUri);
-  //   }
-  // };
-
 
   return (
     <Formik
@@ -164,7 +138,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
               // Web Date Picker
               <DatePicker
                 selected={new Date(values.dateOfBirth)}
-                onChange={(date) => handleDateChange(date, setFieldValue)}
+                onChange={(date) => { console.log(date); handleDateChange(date, setFieldValue) }}
                 dateFormat="P"
                 locale={uk}
                 showMonthDropdown
@@ -175,22 +149,6 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({
 
               <View>
                 <MobileDatePicker initialDate={new Date(values.dateOfBirth)} setDate={(date) => setFieldValue('dateOfBirth', date)} mode="date" />
-                {/* <TouchableOpacity
-                  style={styles.datePickerButton}
-                  onPress={() => setDatePickerVisibility(true)}
-                >
-                  <Text>
-                    {values.dateOfBirth ? values.dateOfBirth.toLocaleString("uk-UA") : "Виберіть дату народження"}
-                  </Text>
-                </TouchableOpacity>
-
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  date={new Date(values.dateOfBirth)}
-                  onConfirm={(date) => handleConfirmDate(date, setFieldValue)}
-                  onCancel={() => setDatePickerVisibility(false)}
-                /> */}
               </View>
             )}
             {touched.dateOfBirth && errors.dateOfBirth && (

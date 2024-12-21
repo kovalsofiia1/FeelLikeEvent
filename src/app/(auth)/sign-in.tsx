@@ -42,22 +42,20 @@ const SignIn = () => {
     };
 
     return (
-        <ScrollView>
-            <Container>
-                <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 24, marginBottom: 16, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }}>
-                    <View>
-                        <Text className="font-medium text-3xl mb-5">Увійти</Text>
-                        <Text className="text-lg text-slate-600">
-                            Ласкаво просимо назад! Будь ласка, введіть свої облікові дані, щоб отримати доступ до свого акаунту та продовжити пошук подій.
-                        </Text>
-                    </View>
-                    <Formik
-                        initialValues={{ email: '', password: '' }}
-                        validationSchema={loginSchema}
-                        onSubmit={handleSubmit}
-                    >
-                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
-                            <View className="py-10 flex gap-3">
+        <Container>
+            <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 24, marginBottom: 16, maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }}>
+                <View>
+                    <Text className="font-medium text-3xl mb-5">Увійти</Text>
+                    <Text className="text-lg text-slate-600">Ласкаво просимо назад! Будь ласка, введіть свої облікові дані, щоб отримати доступ до свого акаунту та продовжити пошук подій.</Text>
+                </View>
+                <Formik
+                    initialValues={{ email: '', password: '' }}
+                    validationSchema={loginSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({ handleChange, handleSubmit, values, errors, touched, isSubmitting }) => (
+                        <View className="py-10 flex gap-2">
+                            <View className="flex gap-2">
                                 <FormField
                                     title="Email"
                                     placeholder="Введіть email"
@@ -74,25 +72,25 @@ const SignIn = () => {
                                     handleChangeText={handleChange('password')}
                                     errorMessage={touched.password && errors.password ? errors.password : ''}
                                 />
-                                {loading && <Text>Loading...</Text>}
-                                {error && <Text className="text-red-600">{error}</Text>}
-                                <CustomButton
-                                    onPress={handleSubmit as () => void}
-                                    additionalStyles="w-full px-3 text-center"
-                                    textAdditionalStyles="text-lg"
-                                    isDisabled={isSubmitting || loading}
-                                >
-                                    {isSubmitting || loading ? 'Завантаження...' : 'Увійти'}
-                                </CustomButton>
                             </View>
-                        )}
-                    </Formik>
-                    <Link href="/sign-up" className="text-blue-500 underline py-3 text-center">
-                        Не маєте акаунта? Зареєструйтеся
-                    </Link>
-                </View>
-            </Container>
-        </ScrollView>
+                            {loading && <Text style={{ fontSize: 16 }}>Loading...</Text>}
+                            {error && <Text style={{ color: 'red', fontSize: 16 }}>{error}</Text>}
+                            <CustomButton
+                                onPress={handleSubmit as () => void}
+                                additionalStyles="w-full px-3 text-center"
+                                textAdditionalStyles="text-lg"
+                                isDisabled={isSubmitting || loading}
+                            >
+                                {isSubmitting || loading ? 'Завантаження...' : 'Увійти'}
+                            </CustomButton>
+                        </View>
+                    )}
+                </Formik>
+                <Link href="/sign-up" className="text-blue-500 underline py-3 text-center">
+                    Не маєте акаунта? Зареєструйтеся
+                </Link>
+            </View>
+        </Container>
     );
 };
 

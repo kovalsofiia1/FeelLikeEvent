@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Button, View, Text } from "react-native";
+import { View, Text } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 interface Props {
@@ -21,7 +21,7 @@ const MobileDatePicker = ({ initialDate, setDate, mode = "datetime" }: Props) =>
   };
 
   const handleConfirm = (date: Date) => {
-    setDate(date);
+    setDate(new Date(date));
     hideDatePicker();
   };
 
@@ -45,5 +45,3 @@ const MobileDatePicker = ({ initialDate, setDate, mode = "datetime" }: Props) =>
 }
 
 export default MobileDatePicker
-
-// const styles = StyleSheet.create({})

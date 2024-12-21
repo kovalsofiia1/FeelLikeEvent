@@ -13,7 +13,7 @@ const Bookings = ({ bookings }: Props) => {
       <View className='flex flex-col gap-2'>
         {bookings.length ?
           (bookings.map((booking) => (
-            <View className='shadow-sm border border-slate-300 p-1'>
+            <View className='shadow-sm border border-slate-300 p-1' key={booking._id}>
               <Text>Ім'я: {booking.userId.name} {booking.additionalInformation.name !== booking.userId.name && `(${booking.additionalInformation.name})`}</Text>
               <Text>Email: {booking.userId.email}</Text>
               <Text>Номер телефону: {booking.additionalInformation.phoneNumber}</Text>
